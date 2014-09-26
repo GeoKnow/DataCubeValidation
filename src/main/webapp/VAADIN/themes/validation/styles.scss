@@ -1,0 +1,11 @@
+@import "addons.scss";
+@import "validation.scss";
+
+/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
+/* The actual styles should be defined in validation.scss */
+.validation {
+  @include addons;
+
+  // Include validation theme styles in your theme
+  @include validation;
+}
