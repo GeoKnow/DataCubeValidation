@@ -10,6 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -34,6 +35,7 @@ public class ValidationComponent extends CustomComponent {
     private void createUI(){
         rootLayout.removeAllComponents();
         createHeader();
+        createListeners();
     }
     
     private void createHeader(){
@@ -54,6 +56,15 @@ public class ValidationComponent extends CustomComponent {
         headerLayout.addComponent(btnClearAll);
         headerLayout.addComponent(btnEvalAll);
         headerLayout.addComponent(btnSettings);
+    }
+    
+    private void createListeners(){
+        btnSettings.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Notification.show("Settings pressed!");
+            }
+        });
     }
 
     @Override
