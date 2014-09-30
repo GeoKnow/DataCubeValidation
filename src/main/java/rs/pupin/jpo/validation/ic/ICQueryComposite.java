@@ -1,0 +1,49 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rs.pupin.jpo.validation.ic;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import org.openrdf.query.BindingSet;
+
+/**
+ *
+ * @author vukm
+ */
+public class ICQueryComposite extends ICQuery {
+    
+    private List<BindingSet> resList = new LinkedList<BindingSet>();
+    
+    @Override
+    public void add(ICQuery q) { list.add(q); }
+    
+    @Override
+    public void remove(ICQuery q) { list.remove(q); }
+    
+    @Override
+    public Boolean getStatus(){
+        Boolean res = null;
+        for (ICQuery q:list){
+            if (q.getStatus() == null) return null;
+            if (!q.getStatus()) res = q.getStatus(); 
+        }
+        if (res != null) return res;
+        return true;
+    }
+    
+    @Override
+    public List<BindingSet> evaluate(){
+        resList.clear();
+        for (ICQuery q: list) resList.addAll(q.evaluate());
+        return resList;
+    }
+
+    @Override
+    public Iterator<BindingSet> getResults() {
+        return resList.iterator();
+    }
+}

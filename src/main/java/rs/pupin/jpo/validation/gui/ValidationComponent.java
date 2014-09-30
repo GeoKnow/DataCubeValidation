@@ -11,7 +11,9 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
+import org.openrdf.repository.Repository;
 
 /**
  *
@@ -19,13 +21,16 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class ValidationComponent extends CustomComponent {
     
+    private final Repository repository;
     private HorizontalLayout headerLayout;
     private Button btnSettings;
     private Button btnClearAll;
     private Button btnEvalAll;
     private final VerticalLayout rootLayout;
+    private Tree criteriaTree;
     
-    public ValidationComponent(){
+    public ValidationComponent(Repository repository){
+        this.repository = repository;
         setSizeFull();
         rootLayout = new VerticalLayout();
         rootLayout.setSizeFull();
@@ -56,6 +61,13 @@ public class ValidationComponent extends CustomComponent {
         headerLayout.addComponent(btnClearAll);
         headerLayout.addComponent(btnEvalAll);
         headerLayout.addComponent(btnSettings);
+    }
+    
+    private void createConstraints(){
+        criteriaTree = new Tree("Validation criteria");
+        criteriaTree.setNullSelectionAllowed(false);
+        criteriaTree.setImmediate(true);
+        // TODO create tree items
     }
     
     private void createListeners(){

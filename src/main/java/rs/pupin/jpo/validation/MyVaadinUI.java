@@ -12,6 +12,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.sparql.SPARQLRepository;
 import rs.pupin.jpo.validation.gui.ValidationComponent;
 
 @Theme("validation")
@@ -31,6 +36,13 @@ public class MyVaadinUI extends UI
         final String graph = (g!=null)?g:"http://test-validation/regular-data";
         final String endpoint = (e!=null)?e:"http://jpo2.imp.bg.ac.rs/sparql";
         
+        final Repository repository = new SPARQLRepository(endpoint);
+        try {
+            repository.initialize();
+        } catch (RepositoryException ex) {
+            Logger.getLogger(MyVaadinUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 //        final VerticalLayout layout = new VerticalLayout();
 //        layout.setMargin(true);
 //        setContent(layout);
@@ -44,7 +56,7 @@ public class MyVaadinUI extends UI
 //        });
 //        layout.addComponent(button);
         
-        setContent(new ValidationComponent());
+        setContent(new ValidationComponent(repository));
     }
 
 }
