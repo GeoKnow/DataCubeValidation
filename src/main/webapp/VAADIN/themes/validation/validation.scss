@@ -27,6 +27,9 @@
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
+$header-background-color: #0897E1;
+$v-focus-color: $header-background-color;
+
 @import "../valo/valo.scss";
 
 @mixin validation {
@@ -44,5 +47,10 @@
       font-size: 1.3em;
       font-weight: bold;
       color: white;
+  }
+  .v-tree-node-caption.v-tree-node-selected > div {
+      background: lavender;
+      font-weight: bold;
+      color: black;
   }
 }

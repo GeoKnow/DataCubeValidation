@@ -21,12 +21,13 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import rs.pupin.jpo.validation.ic.ICQuery;
+import rs.pupin.jpo.validation.ic.ICQueryListener;
 
 /**
  *
  * @author vukm
  */
-public abstract class IntegrityConstraintComponent extends CustomComponent {
+public abstract class IntegrityConstraintComponent extends CustomComponent implements ICQueryListener {
     
     protected Repository repository;
     protected String graph;
@@ -38,6 +39,8 @@ public abstract class IntegrityConstraintComponent extends CustomComponent {
         this.repository = repository;
         this.graph = graph;
         this.icQuery = generateICQuery();
+        this.icQuery.addQueryListener(this);
+        setCompositionRoot(rootLayout);
     }
     
     public abstract ICQuery generateICQuery();
@@ -48,12 +51,21 @@ public abstract class IntegrityConstraintComponent extends CustomComponent {
         generateGUI();
     }
 
-    public List<BindingSet> evaluate() {
-        return icQuery.evaluate();
+    public List<BindingSet> eval() {
+        return icQuery.eval();
     }
 
     public Boolean getStatus() {
         return icQuery.getStatus();
+    }
+
+    @Override
+    public void icQueryChanged(ICQuery ic) {
+        refreshGUI();
+    }
+
+    public ICQuery getIcQuery() {
+        return icQuery;
     }
     
     public Statement getStatementFromUris(String s, String p, String o){

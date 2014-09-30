@@ -56,7 +56,7 @@ public class MyVaadinUI extends UI
 //        });
 //        layout.addComponent(button);
         
-        setContent(new ValidationComponent(repository));
+        setContent(new ValidationComponent(repository, graph));
     }
 
 }

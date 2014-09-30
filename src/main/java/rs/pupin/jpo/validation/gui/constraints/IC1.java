@@ -125,7 +125,7 @@ public class IC1 extends IntegrityConstraintComponent {
         panelLayout.addComponent(buttonsLayout);
         panelLayout.setExpandRatio(buttonsLayout, 2.0f);
 		
-        listObs.addListener(new Property.ValueChangeListener() {
+        listObs.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String)event.getProperty().getValue());
                 int i=1;
@@ -145,7 +145,7 @@ public class IC1 extends IntegrityConstraintComponent {
             }
         });
 		
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent event) {
                 String chosenDataSet = (String)comboDataSets.getValue();
                 String observation = (String)listObs.getValue();
@@ -171,8 +171,7 @@ public class IC1 extends IntegrityConstraintComponent {
                 addStmts.add(getStatementFromUris(observation, dataSetProp, chosenDataSet));
                 uploadStatements(addStmts);
                 Notification.show("Fix executed");
-//                evaluateIntegrityConstraint(icLinkToDataSet);
-//                observationLinks();
+                icQuery.eval();
             }
         });
     }
