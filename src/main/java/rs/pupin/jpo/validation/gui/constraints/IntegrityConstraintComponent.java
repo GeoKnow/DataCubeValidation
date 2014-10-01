@@ -7,6 +7,7 @@ package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import java.util.ArrayList;
 import java.util.List;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -94,11 +95,33 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         return null;
     }
     
+    public List<String> getDataSets(){
+        StringBuilder q = new StringBuilder();
+        q.append("select ?ds from <").append(graph);
+        q.append("> where { ?ds a <http://purl.org/linked-data/cube#DataSet> . }");
+        try {
+            RepositoryConnection con = repository.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
+            TupleQueryResult result = tupleQuery.evaluate();
+            ArrayList<String> list = new ArrayList<String>();
+            while (result.hasNext())
+                list.add(result.next().getValue("ds").stringValue());
+            return list;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public void uploadStatements(Iterable<? extends Statement> statements){
         try {
             RepositoryConnection con = repository.getConnection();
-            URI graph = repository.getValueFactory().createURI(this.graph);
-            con.add(statements, graph);
+            URI graphURI = repository.getValueFactory().createURI(this.graph);
+            con.add(statements, graphURI);
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
@@ -107,11 +130,19 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     public void removeStatements(Iterable<? extends Statement> statements){
         try {
             RepositoryConnection con = repository.getConnection();
-            URI graph = repository.getValueFactory().createURI(this.graph);
-            con.remove(statements, graph);
+            URI graphURI = repository.getValueFactory().createURI(this.graph);
+            con.remove(statements, graphURI);
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
+    }
+    
+    public String normalizeQuery(StringBuilder builder){
+        String res = builder.toString();
+        res = res.replaceAll("(.*) a qb:DimensionProperty .", "{ { ($1) a qb:DimensionProperty . } UNION { [] qb:dimension ($1) . } }");
+        res = res.replaceAll("(.*) a qb:AttributeProperty .", "{ { ($1) a qb:AttributeProperty . } UNION { [] qb:attribute ($1) . } }");
+        res = res.replaceAll("(.*) a qb:MeasureProperty .", "{ { ($1) a qb:MeasureProperty . } UNION { [] qb:measure ($1) . } }");
+        return res;
     }
     
 }

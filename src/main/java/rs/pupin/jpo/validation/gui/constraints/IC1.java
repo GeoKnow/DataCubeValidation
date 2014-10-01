@@ -21,9 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import org.openrdf.model.Statement;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import rs.pupin.jpo.validation.ic.ICQuery;
 import rs.pupin.jpo.validation.ic.ICQuerySimple;
 
@@ -69,7 +74,7 @@ public class IC1 extends IntegrityConstraintComponent {
             map.put(set.getValue("obs").stringValue(), set.getValue("dsNum").stringValue());
         }
 		
-        if (map.size() == 0){
+        if (map.isEmpty()){
             Label label = new Label();
             label.setValue("All observations have links to data sets");
             rootLayout.addComponent(label);
@@ -151,12 +156,12 @@ public class IC1 extends IntegrityConstraintComponent {
                 String observation = (String)listObs.getValue();
 
                 if (chosenDataSet == null) {
-                        Notification.show("DataSet was not selected", Notification.TYPE_ERROR_MESSAGE);
-                        return;
+                    Notification.show("DataSet was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    return;
                 }
                 if (observation == null) {
-                        Notification.show("Observation was not selected", Notification.TYPE_ERROR_MESSAGE);
-                        return;
+                    Notification.show("Observation was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    return;
                 }
 
                 String dataSetProp = "http://purl.org/linked-data/cube#dataSet";
@@ -176,11 +181,26 @@ public class IC1 extends IntegrityConstraintComponent {
         });
     }
     
-    private List<String> getDataSets(){
-        return null;
-    }
-    
-    private List<String> getObsDataSets(String observation){
+    private List<String> getObsDataSets(String obs){
+        StringBuilder q = new StringBuilder();
+        q.append("select ?ds from <").append(graph);
+        q.append("> where { <").append(obs).append("> <http://purl.org/linked-data/cube#dataSet> ?ds . ");
+        q.append("?ds a <http://purl.org/linked-data/cube#DataSet> . }");
+        try {
+            RepositoryConnection con = repository.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
+            TupleQueryResult result = tupleQuery.evaluate();
+            ArrayList<String> list = new ArrayList<String>();
+            while (result.hasNext())
+                list.add(result.next().getValue("ds").stringValue());
+            return list;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
         return null;
     }
     

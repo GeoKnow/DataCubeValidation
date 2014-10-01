@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.ClientConnector;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
@@ -21,16 +22,22 @@ import rs.pupin.jpo.validation.gui.ValidationComponent;
 
 @Theme("validation")
 @SuppressWarnings("serial")
-public class MyVaadinUI extends UI
+public class MyVaadinUI extends UI implements ClientConnector.DetachListener
 {
 
+    @Override
+    public void detach(DetachEvent event) {
+        System.out.println("Detach called!");
+    }
+
     @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class, widgetset = "rs.pupin.jpo.validation.AppWidgetSet")
+    @VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class, widgetset = "rs.pupin.jpo.validation.AppWidgetSet", heartbeatInterval = 120)
     public static class Servlet extends VaadinServlet {
     }
 
     @Override
     protected void init(VaadinRequest request) {
+        addDetachListener(this);
         String g = request.getParameter("graph");
         String e = request.getParameter("endpoint");
         final String graph = (g!=null)?g:"http://test-validation/regular-data";

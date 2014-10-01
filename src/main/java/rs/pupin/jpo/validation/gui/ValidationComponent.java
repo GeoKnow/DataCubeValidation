@@ -126,11 +126,13 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     @Override
     public void detach() {
         super.detach(); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Detach Validation called!");
     }
 
     @Override
     public void attach() {
         createUI();
+        System.out.println("Attach called!");
     }
 
     @Override
