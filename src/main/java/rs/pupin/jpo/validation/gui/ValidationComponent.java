@@ -95,7 +95,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         criteriaTree.setWidth("100%");
         // TODO create tree items
         IC1 ic1 = new IC1(repository, graph);
-        addIC(ic1, "IC1 - Observations have links");
+        addIC(ic1);
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -106,10 +106,12 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         });
     }
     
-    private void addIC(IntegrityConstraintComponent component, String caption){
+    private void addIC(IntegrityConstraintComponent component){
         ICQuery ic = component.getIcQuery();
         criteriaTree.addItem(ic);
-        criteriaTree.setItemCaption(ic, caption);
+        criteriaTree.setItemCaption(ic, component.getName());
+        criteriaTree.setItemIcon(ic, component.getIcon());
+        criteriaTree.setChildrenAllowed(ic, false);
         ic.addQueryListener(this);
         icHash.put(ic, component);
     }
@@ -140,7 +142,9 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         // TODO implement properly, aka add appropriate IntegrityConstraintComponent
         contentLayout.removeAllComponents();
         contentLayout.addComponent(new Label("Clicked " + ic));
-        contentLayout.addComponent(icHash.get(ic));
+        IntegrityConstraintComponent icComponent = icHash.get(ic);
+        contentLayout.addComponent(icComponent);
+        criteriaTree.setItemIcon(ic, icComponent.getIcon());
     }
     
 }

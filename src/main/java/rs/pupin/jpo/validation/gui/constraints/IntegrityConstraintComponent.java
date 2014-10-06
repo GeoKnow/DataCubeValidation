@@ -5,6 +5,7 @@
  */
 package rs.pupin.jpo.validation.gui.constraints;
 
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import rs.pupin.jpo.validation.gui.DefaultStatusToIconMapper;
+import rs.pupin.jpo.validation.gui.StatusToIconMapper;
 import rs.pupin.jpo.validation.ic.ICQuery;
 import rs.pupin.jpo.validation.ic.ICQueryListener;
 
@@ -34,6 +37,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     protected String graph;
     protected ICQuery icQuery;
     protected VerticalLayout rootLayout;
+    protected StatusToIconMapper statusMapper;
     
     public IntegrityConstraintComponent(Repository repository, String graph){
         this.rootLayout = new VerticalLayout();
@@ -41,6 +45,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         this.graph = graph;
         this.icQuery = generateICQuery();
         this.icQuery.addQueryListener(this);
+        this.statusMapper = DefaultStatusToIconMapper.getInstance();
         setCompositionRoot(rootLayout);
     }
     
@@ -60,6 +65,14 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         return icQuery.getStatus();
     }
 
+    public void setStatusMapper(StatusToIconMapper statusMapper) {
+        this.statusMapper = statusMapper;
+    }
+    
+    public ThemeResource getIcon(){
+        return statusMapper.map(getStatus());
+    }
+
     @Override
     public void icQueryChanged(ICQuery ic) {
         refreshGUI();
@@ -67,6 +80,10 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
 
     public ICQuery getIcQuery() {
         return icQuery;
+    }
+    
+    public String getName(){
+        return "Unknown";
     }
     
     public Statement getStatementFromUris(String s, String p, String o){

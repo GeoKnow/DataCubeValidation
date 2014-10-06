@@ -43,6 +43,11 @@ public class IC1 extends IntegrityConstraintComponent {
     }
 
     @Override
+    public String getName() {
+        return "IC1 - Observations have links";
+    }
+
+    @Override
     public ICQuery generateICQuery() {
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.append("prefix qb: <http://purl.org/linked-data/cube#> \n");
