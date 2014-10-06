@@ -25,7 +25,7 @@ public class IC4 extends IntegrityConstraintComponent {
         strBuilder.append("prefix qb: <http://purl.org/linked-data/cube#> \n");
         strBuilder.append("select ?dim \n");
         strBuilder.append("from <").append(graph).append("> where { \n");
-        strBuilder.append("  { { ?dim a qb:DimensionProperty . } UNION { [] qb:dimension ?dim . } } \n");
+        strBuilder.append("  ?dim a qb:DimensionProperty . \n");
         strBuilder.append("  FILTER NOT EXISTS { ?dim rdfs:range [] . } \n");
         strBuilder.append("}");
         return new ICQuerySimple(repository, strBuilder.toString());

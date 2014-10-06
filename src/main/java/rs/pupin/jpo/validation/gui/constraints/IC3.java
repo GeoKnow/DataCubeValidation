@@ -28,8 +28,8 @@ public class IC3 extends IntegrityConstraintComponent {
         strBuilder.append("  ?dsd a qb:DataStructureDefinition . \n");
         strBuilder.append("  FILTER NOT EXISTS { \n");
         strBuilder.append("    ?dsd qb:component ?cs . \n");
-        strBuilder.append("    { { ?cs qb:componentProperty ?prop . \n");
-        strBuilder.append("    ?prop a qb:MeasureProperty . } UNION { ?cs qb:measure ?prop . } } \n");
+        strBuilder.append("    ?cs qb:componentProperty ?prop . \n");
+        strBuilder.append("    ?prop a qb:MeasureProperty . \n");
         strBuilder.append("  } \n");
         strBuilder.append("}");
         return new ICQuerySimple(repository, strBuilder.toString());

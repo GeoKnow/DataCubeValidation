@@ -27,16 +27,8 @@ public class IC6 extends IntegrityConstraintComponent {
         strBuilder.append("from <").append(graph).append("> where { \n");
         strBuilder.append("  ?dsd qb:component ?componentSpec . \n");
         strBuilder.append("  ?componentSpec qb:componentRequired \"false\"^^xsd:boolean . \n");
-        strBuilder.append("  { { \n");
         strBuilder.append("  ?componentSpec qb:componentProperty ?component . \n");
-        strBuilder.append("  } UNION { \n");
-        strBuilder.append("  ?componentSpec qb:dimension ?component . \n");
-        strBuilder.append("  } UNION { \n");
-        strBuilder.append("  ?componentSpec qb:attribute ?component . \n");
-        strBuilder.append("  } UNION { \n");
-        strBuilder.append("  ?componentSpec qb:measure ?component . \n");
-        strBuilder.append("  } } \n");
-        strBuilder.append("  FILTER NOT EXISTS { ?component a qb:AttributeProperty . } \n");
+        strBuilder.append("  FILTER NOT EXISTS { ?component a qb:AttributeProperty } \n");
         strBuilder.append("}");
         return new ICQuerySimple(repository, strBuilder.toString());
     }
