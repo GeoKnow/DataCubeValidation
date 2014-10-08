@@ -10,15 +10,19 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import java.util.HashMap;
 import org.openrdf.repository.Repository;
 import rs.pupin.jpo.validation.gui.constraints.IC1;
+import rs.pupin.jpo.validation.gui.constraints.IC2;
 import rs.pupin.jpo.validation.gui.constraints.IntegrityConstraintComponent;
 import rs.pupin.jpo.validation.ic.ICQuery;
 import rs.pupin.jpo.validation.ic.ICQueryListener;
@@ -96,6 +100,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         // TODO create tree items
         IC1 ic1 = new IC1(repository, graph);
         addIC(ic1);
+        addIC(new IC2(repository, graph));
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -121,6 +126,31 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 Notification.show("Settings pressed!");
+                Window settingsWindow = new Window();
+                settingsWindow.setModal(true);
+                settingsWindow.setWidth("500px");
+                settingsWindow.setHeight("300px");
+                GridLayout settingsLayout = new GridLayout(2,2);
+//                settingsLayout.setColumns(2);
+//                settingsLayout.setRows(2);
+                settingsLayout.setSizeFull();
+                settingsLayout.setColumnExpandRatio(1, 2.0f);
+                settingsLayout.setColumnExpandRatio(0, 0.0f);
+                settingsWindow.setContent(settingsLayout);
+                Label lbl = new Label("Endpoint");
+                lbl.setWidth("100px");
+                settingsLayout.addComponent(lbl,0,0,0,0);
+                TextField endpointInput = new TextField();
+                endpointInput.setWidth("100%");
+                settingsLayout.addComponent(endpointInput,1,0,1,0);
+                lbl = new Label("Graph");
+                lbl.setWidth("100px");
+                settingsLayout.addComponent(lbl,0,1,0,1);
+                TextField graphInput = new TextField();
+                graphInput.setWidth("100%");
+                settingsLayout.addComponent(graphInput,1,1,1,1);
+                settingsWindow.center();
+                getUI().addWindow(settingsWindow);
             }
         });
     }
