@@ -35,8 +35,8 @@ public class MyVaadinUI extends UI implements ClientConnector.DetachListener
         addDetachListener(this);
         String g = request.getParameter("graph");
         String e = request.getParameter("endpoint");
-        final String graph = (g!=null)?g:"http://test-validation/regular-data";
-        final String endpoint = (e!=null)?e:"http://jpo2.imp.bg.ac.rs/sparql";
+        final String graph = (g!=null)?g:"http://validation-test/regular-data/";
+        final String endpoint = (e!=null)?e:"http://default.endpoint/sparql";
         
         final Repository repository = new SPARQLRepository(endpoint);
         try {
