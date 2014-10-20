@@ -11823,6 +11823,11 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #0897E1;
 }
 
+.validation .v-verticallayout.v-verticallayout-content.content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
 .validation .v-horizontallayout-header .v-label {
 	font-size: 1.3em;
 	font-weight: bold;

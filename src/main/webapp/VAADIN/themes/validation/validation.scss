@@ -43,6 +43,10 @@ $v-focus-color: $header-background-color;
       padding-bottom: $header-padding;
       background-color: #0897E1;
   }
+  .v-verticallayout.v-verticallayout-content.content {
+      padding-left: $header-padding;
+      padding-right: $header-padding;
+  }
   .v-horizontallayout-header .v-label {
       font-size: 1.3em;
       font-weight: bold;

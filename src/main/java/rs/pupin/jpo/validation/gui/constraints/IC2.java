@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.openrdf.model.Statement;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
@@ -183,29 +181,6 @@ public class IC2 extends IntegrityConstraintComponent {
                 icQuery.eval();
             }
         });
-    }
-    
-    private List<String> getDataStructureDefinitions() {
-        StringBuilder q = new StringBuilder();
-        q.append("select ?dsd from <").append(graph);
-        q.append("> where { ?dsd a <http://purl.org/linked-data/cube#DataStructureDefinition> . }");
-        try {
-            RepositoryConnection con = repository.getConnection();
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
-            TupleQueryResult result = tupleQuery.evaluate();
-            ArrayList<String> list = new ArrayList<String>();
-            while (result.hasNext()) {
-                list.add(result.next().getValue("dsd").stringValue());
-            }
-            return list;
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-        } catch (MalformedQueryException e) {
-            e.printStackTrace();
-        } catch (QueryEvaluationException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     
     private List<String> getDataSetDSDs(String dataSet) {

@@ -41,6 +41,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     
     public IntegrityConstraintComponent(Repository repository, String graph){
         this.rootLayout = new VerticalLayout();
+        this.rootLayout.setSpacing(true);
         this.repository = repository;
         this.graph = graph;
         this.icQuery = generateICQuery();
@@ -160,6 +161,52 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         res = res.replaceAll("(.*) a qb:AttributeProperty .", "{ { ($1) a qb:AttributeProperty . } UNION { [] qb:attribute ($1) . } }");
         res = res.replaceAll("(.*) a qb:MeasureProperty .", "{ { ($1) a qb:MeasureProperty . } UNION { [] qb:measure ($1) . } }");
         return res;
+    }
+    
+    protected List<String> getDataStructureDefinitions() {
+        StringBuilder q = new StringBuilder();
+        q.append("select ?dsd from <").append(graph);
+        q.append("> where { ?dsd a <http://purl.org/linked-data/cube#DataStructureDefinition> . }");
+        try {
+            RepositoryConnection con = repository.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
+            TupleQueryResult result = tupleQuery.evaluate();
+            ArrayList<String> list = new ArrayList<String>();
+            while (result.hasNext()) {
+                list.add(result.next().getValue("dsd").stringValue());
+            }
+            return list;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    protected List<String> getObservations() {
+        StringBuilder q = new StringBuilder();
+        q.append("select ?o from <").append(graph);
+        q.append("> where { ?o a <http://purl.org/linked-data/cube#Observation> . }");
+        try {
+            RepositoryConnection con = repository.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
+            TupleQueryResult result = tupleQuery.evaluate();
+            ArrayList<String> list = new ArrayList<String>();
+            while (result.hasNext()) {
+                list.add(result.next().getValue("o").stringValue());
+            }
+            return list;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
 }

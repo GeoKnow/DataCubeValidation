@@ -31,7 +31,7 @@ import org.openrdf.repository.sparql.SPARQLRepository;
  */
 public class ValidationSettingsWindow extends Window {
     
-    public class ValidationSettingsState {
+    public static class ValidationSettingsState {
         public Repository repository;
         public String graph;
     }
@@ -48,6 +48,9 @@ public class ValidationSettingsWindow extends Window {
     public ValidationSettingsWindow(ValidationSettingsState state){
         this.state = state;
         setModal(true);
+        setClosable(false);
+        setResizable(false);
+        setDraggable(false);
         setWidth("700px");
         setHeight("400px");
         
@@ -82,6 +85,7 @@ public class ValidationSettingsWindow extends Window {
         settingsLayout.addComponent(lbl, 0, 1, 0, 1);
         settingsLayout.setComponentAlignment(lbl, Alignment.MIDDLE_LEFT);
         graphInput = new TextField();
+        graphInput.setValue(state.graph);
         graphInput.setWidth("100%");
         settingsLayout.addComponent(graphInput, 1, 1, 1, 1);
 
@@ -143,7 +147,7 @@ public class ValidationSettingsWindow extends Window {
                 try {
                     r.initialize();
                     System.out.println(r.isWritable());
-                    TupleQueryResult res = r.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, "select distinct ?g where { graph <?g> { ?s ?p ?o } }").evaluate();
+                    TupleQueryResult res = r.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, "select distinct ?g ?o where { graph <?g> { ?s a ?o . } }").evaluate();
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         System.out.println("   " + set.getValue("g").toString());
