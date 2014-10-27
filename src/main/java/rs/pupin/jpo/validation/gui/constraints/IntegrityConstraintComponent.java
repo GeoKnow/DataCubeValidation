@@ -5,8 +5,10 @@
  */
 package rs.pupin.jpo.validation.gui.constraints;
 
+import com.vaadin.data.Property;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQuery;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
@@ -38,6 +42,31 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     protected ICQuery icQuery;
     protected VerticalLayout rootLayout;
     protected StatusToIconMapper statusMapper;
+    
+    protected class DetailsListener implements Property.ValueChangeListener {
+
+        private Table tbl;
+
+        public DetailsListener(Table tbl) {
+            this.tbl = tbl;
+        }
+
+        @Override
+        public void valueChange(Property.ValueChangeEvent event) {
+            TupleQueryResult res = getResourceProperties((String) event.getProperty().getValue());
+            int i = 1;
+            tbl.removeAllItems();
+            try {
+                while (res.hasNext()) {
+                    BindingSet set = res.next();
+                    tbl.addItem(new Object[]{set.getValue("p").stringValue(),
+                        set.getValue("o").stringValue()}, new Integer(i++));
+                }
+            } catch (QueryEvaluationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
     public IntegrityConstraintComponent(Repository repository, String graph){
         this.rootLayout = new VerticalLayout();
@@ -199,6 +228,38 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
                 list.add(result.next().getValue("o").stringValue());
             }
             return list;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    protected GraphQueryResult executeGraphQuery(String query) {
+        try {
+            RepositoryConnection con = repository.getConnection();
+            GraphQuery graphQuery = con.prepareGraphQuery(QueryLanguage.SPARQL, query);
+            GraphQueryResult result = graphQuery.evaluate();
+            return result;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected TupleQueryResult executeTupleQuery(String query) {
+        try {
+            RepositoryConnection con = repository.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, query);
+            TupleQueryResult tupleResult = tupleQuery.evaluate();
+            return tupleResult;
         } catch (RepositoryException e) {
             e.printStackTrace();
         } catch (MalformedQueryException e) {

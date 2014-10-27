@@ -36,15 +36,15 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  *
  * @author vukm
  */
-public class IC1 extends IntegrityConstraintComponent {
+public class IC01 extends IntegrityConstraintComponent {
 
-    public IC1(Repository repository, String graph) {
+    public IC01(Repository repository, String graph) {
         super(repository, graph);
     }
 
     @Override
     public String getName() {
-        return "IC1 - Observations have links";
+        return "IC-1 Observations have links";
     }
 
     @Override

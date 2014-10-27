@@ -20,11 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
-import rs.pupin.jpo.validation.gui.constraints.IC1;
-import rs.pupin.jpo.validation.gui.constraints.IC2;
-import rs.pupin.jpo.validation.gui.constraints.IntegrityConstraintComponent;
-import rs.pupin.jpo.validation.gui.constraints.Provenance;
-import rs.pupin.jpo.validation.gui.constraints.Summary;
+import rs.pupin.jpo.validation.gui.constraints.*;
 import rs.pupin.jpo.validation.ic.ICQuery;
 import rs.pupin.jpo.validation.ic.ICQueryListener;
 
@@ -106,9 +102,17 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         // TODO create tree items
         addIC(new Summary(repository, graph));
         addIC(new Provenance(repository, graph));
-        IC1 ic1 = new IC1(repository, graph);
+        IC01 ic1 = new IC01(repository, graph);
         addIC(ic1);
-        addIC(new IC2(repository, graph));
+        addIC(new IC02(repository, graph));
+        addIC(new IC03(repository, graph));
+        addIC(new IC04(repository, graph));
+        addIC(new IC05(repository, graph));
+        addIC(new IC06(repository, graph));
+        addIC(new IC07(repository, graph));
+        addIC(new IC08(repository, graph));
+        addIC(new IC09(repository, graph));
+        addIC(new IC10(repository, graph));
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override

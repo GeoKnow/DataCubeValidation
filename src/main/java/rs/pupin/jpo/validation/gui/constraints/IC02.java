@@ -36,15 +36,15 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  *
  * @author vukm
  */
-public class IC2 extends IntegrityConstraintComponent {
+public class IC02 extends IntegrityConstraintComponent {
 
-    public IC2(Repository repository, String graph) {
+    public IC02(Repository repository, String graph) {
         super(repository, graph);
     }
 
     @Override
     public String getName() {
-        return "IC2 - Unique DSD";
+        return "IC-2 Unique DSD";
     }
 
     @Override
