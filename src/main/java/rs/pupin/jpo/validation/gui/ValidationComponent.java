@@ -102,8 +102,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         // TODO create tree items
         addIC(new Summary(repository, graph));
         addIC(new Provenance(repository, graph));
-        IC01 ic1 = new IC01(repository, graph);
-        addIC(ic1);
+        addIC(new IC01(repository, graph));
         addIC(new IC02(repository, graph));
         addIC(new IC03(repository, graph));
         addIC(new IC04(repository, graph));
@@ -113,6 +112,11 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         addIC(new IC08(repository, graph));
         addIC(new IC09(repository, graph));
         addIC(new IC10(repository, graph));
+        addIC(new IC11(repository, graph));
+        addIC(new IC12(repository, graph));
+        addIC(new IC13(repository, graph));
+        addIC(new IC14(repository, graph));
+        addIC(new IC15(repository, graph));
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override

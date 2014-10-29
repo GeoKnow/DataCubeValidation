@@ -270,4 +270,22 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         return null;
     }
     
+    protected TupleQueryResult getResourceLinks(String resource) {
+        try {
+            RepositoryConnection con = repository.getConnection();
+            StringBuilder q = new StringBuilder();
+            q.append("select ?s ?p from <").append(graph).append("> where { ?s ?p <");
+            q.append(resource).append("> . }");
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, q.toString());
+            return tupleQuery.evaluate();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 }
