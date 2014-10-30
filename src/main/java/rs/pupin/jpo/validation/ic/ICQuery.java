@@ -15,6 +15,10 @@ import org.openrdf.query.BindingSet;
  * @author vukm
  */
 public abstract class ICQuery {
+    public static enum Status { 
+        NEW, RUNNING, GOOD, BAD, CANCELED, ERROR 
+    };
+    
     public static final int New=1, Running=2, Good=3, Bad=4, Canceled=5, Error=6; 
     
     protected List<ICQuery> list = new LinkedList<ICQuery>();
