@@ -121,6 +121,8 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         addIC(new IC17(repository, graph));
         addIC(new IC18(repository, graph));
         addIC(new IC19(repository, graph));
+        addIC(new IC20(repository, graph));
+        addIC(new IC21(repository, graph));
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
