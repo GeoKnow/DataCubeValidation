@@ -32,6 +32,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     
     private Repository repository;
     private String graph;
+    private String endpoint;
     private HorizontalLayout headerLayout;
     private Button btnSettings;
     private Button btnClearAll;
@@ -42,8 +43,9 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     private VerticalLayout contentLayout;
     private final HashMap<ICQuery, IntegrityConstraintComponent> icHash;
     
-    public ValidationComponent(Repository repository, String graph){
+    public ValidationComponent(Repository repository, String endpoint, String graph){
         this.repository = repository;
+        this.endpoint = endpoint;
         this.graph = graph;
         this.icHash = new HashMap<ICQuery, IntegrityConstraintComponent>();
         setSizeFull();
@@ -161,7 +163,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final ValidationSettingsWindow.ValidationSettingsState state = new ValidationSettingsWindow.ValidationSettingsState();
-                state.repository = repository;
+                state.endpoint = endpoint;
                 state.graph = graph;
                 Window w = new ValidationSettingsWindow(state);
                 w.addCloseListener(new Window.CloseListener() {
@@ -172,9 +174,12 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                         } catch (RepositoryException ex) {
                             Logger.getLogger(ValidationComponent.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        repository = state.repository;
-                        graph = state.graph;
-                        refresh();
+                        if (state.repository != null && state.repository.isInitialized()) {
+                            repository = state.repository;
+                            endpoint = state.endpoint;
+                            graph = state.graph;
+                            refresh();
+                        }
                     }
                 });
                 getUI().addWindow(w);

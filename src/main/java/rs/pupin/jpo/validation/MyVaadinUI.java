@@ -58,7 +58,7 @@ public class MyVaadinUI extends UI implements ClientConnector.DetachListener
 //        });
 //        layout.addComponent(button);
         
-        setContent(new ValidationComponent(repository, graph));
+        setContent(new ValidationComponent(repository, endpoint, graph));
     }
 
 }
