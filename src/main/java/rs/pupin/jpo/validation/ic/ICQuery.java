@@ -16,10 +16,8 @@ import org.openrdf.query.BindingSet;
  */
 public abstract class ICQuery {
     public static enum Status { 
-        NEW, RUNNING, GOOD, BAD, CANCELED, ERROR 
+        NEW, GOOD, BAD, ERROR, UNKNOWN
     };
-    
-    public static final int New=1, Running=2, Good=3, Bad=4, Canceled=5, Error=6; 
     
     protected List<ICQuery> list = new LinkedList<ICQuery>();
     protected List<ICQueryListener> listeners = new LinkedList<ICQueryListener>();
@@ -30,7 +28,7 @@ public abstract class ICQuery {
         for (ICQueryListener l: listeners) l.icQueryChanged(this);
         return res;
     }
-    public abstract Boolean getStatus();
+    public abstract Status getStatus();
     public abstract Iterator<BindingSet> getResults();
     public void add(ICQuery q) {}
     public void remove(ICQuery q) {}

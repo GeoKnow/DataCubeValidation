@@ -24,7 +24,7 @@ import org.openrdf.repository.RepositoryException;
 public class ICQuerySimple extends ICQuery {
     
     private Repository repository;
-    private Boolean status = null;
+    private Status status = Status.NEW;
     private StatusFunction statusFunction;
     private String query;
     private TupleQueryResult res;
@@ -54,19 +54,25 @@ public class ICQuerySimple extends ICQuery {
             res = conn.prepareTupleQuery(QueryLanguage.SPARQL, query).evaluate();
             resList.clear();
             while (res.hasNext()) resList.add(res.next());
-            status = statusFunction.getStatus(resList.iterator());
+            Boolean s = statusFunction.getStatus(resList.iterator());
+            if (s == null) status = Status.ERROR;
+            else if (s) status = Status.GOOD;
+            else status = Status.BAD;
         } catch (RepositoryException e) {
             e.printStackTrace();
+            status = Status.ERROR;
         } catch (MalformedQueryException e) {
             e.printStackTrace();
+            status = Status.ERROR;
         } catch (QueryEvaluationException e) {
             e.printStackTrace();
+            status = Status.ERROR;
         }
         try { if (res!=null) res.close(); } catch (QueryEvaluationException e) {}
         return resList;
     }
     @Override
-    public Boolean getStatus(){
+    public Status getStatus(){
         return status;
     }
     @Override

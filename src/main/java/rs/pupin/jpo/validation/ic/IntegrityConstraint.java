@@ -18,7 +18,7 @@ import org.openrdf.repository.Repository;
 public class IntegrityConstraint {
     private final ICQuery icQuery;
     private final List<BindingSet> resList = new LinkedList<BindingSet>();
-    private Boolean status = null;
+    private ICQuery.Status status = null;
 
     public IntegrityConstraint(Repository repository, String query){
         this.icQuery = new ICQuerySimple(repository, query);
@@ -38,7 +38,7 @@ public class IntegrityConstraint {
     public Iterator<BindingSet> getResults(){ 
         return resList.iterator();
     }
-    public Boolean getStatus(){
+    public ICQuery.Status getStatus(){
         return status;
     }
 }

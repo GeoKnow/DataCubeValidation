@@ -91,7 +91,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         return icQuery.eval();
     }
 
-    public Boolean getStatus() {
+    public ICQuery.Status getStatus() {
         return icQuery.getStatus();
     }
 

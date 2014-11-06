@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui;
 
 import com.vaadin.server.ThemeResource;
+import rs.pupin.jpo.validation.ic.ICQuery;
 
 /**
  *
@@ -13,6 +14,6 @@ import com.vaadin.server.ThemeResource;
  */
 public interface StatusToIconMapper {
     
-    public ThemeResource map(Boolean status);
+    public ThemeResource map(ICQuery.Status status);
     
 }

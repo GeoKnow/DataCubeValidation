@@ -40,8 +40,8 @@ public class Summary extends IntegrityConstraintComponent {
             }
 
             @Override
-            public Boolean getStatus() {
-                return true;
+            public Status getStatus() {
+                return null;
             }
 
             @Override

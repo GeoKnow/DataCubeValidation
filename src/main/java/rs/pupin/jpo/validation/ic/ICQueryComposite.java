@@ -17,6 +17,7 @@ import org.openrdf.query.BindingSet;
 public class ICQueryComposite extends ICQuery {
     
     private List<BindingSet> resList = new LinkedList<BindingSet>();
+    private boolean isNew = true;
     
     @Override
     public void add(ICQuery q) { list.add(q); }
@@ -25,18 +26,31 @@ public class ICQueryComposite extends ICQuery {
     public void remove(ICQuery q) { list.remove(q); }
     
     @Override
-    public Boolean getStatus(){
-        Boolean res = null;
+    public Status getStatus(){
+        if (isNew) return Status.NEW;
+        
+        boolean hasBad = false;
+        boolean hasError = false;
+        boolean hasNew = false;
+        boolean allGood = true;
         for (ICQuery q:list){
             if (q.getStatus() == null) return null;
-            if (!q.getStatus()) res = q.getStatus(); 
+            if (q.getStatus() == Status.ERROR) hasError = true;
+            if (q.getStatus() == Status.BAD) hasBad = true;
+            if (q.getStatus() != Status.GOOD) allGood = false;
+            if (q.getStatus() == Status.NEW) hasNew = true;
         }
-        if (res != null) return res;
-        return true;
+        if (allGood) return Status.GOOD;
+        else if (hasError) return Status.ERROR;
+        else if (hasBad) return Status.BAD;
+        else if (hasNew) return Status.NEW;
+        
+        return Status.UNKNOWN;
     }
     
     @Override
     public List<BindingSet> evaluate(){
+        isNew = false;
         resList.clear();
         for (ICQuery q: list) resList.addAll(q.evaluate());
         return resList;

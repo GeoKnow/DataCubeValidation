@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui;
 
 import com.vaadin.server.ThemeResource;
+import rs.pupin.jpo.validation.ic.ICQuery;
 
 /**
  *
@@ -17,7 +18,7 @@ public class InfoStatusToIconMapper implements StatusToIconMapper {
     private static InfoStatusToIconMapper instance = null;
     
     @Override
-    public ThemeResource map(Boolean status) {
+    public ThemeResource map(ICQuery.Status status) {
         return infoIcon;
     }
     
