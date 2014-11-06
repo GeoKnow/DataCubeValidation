@@ -25,7 +25,7 @@ public class MyVaadinUI extends UI implements ClientConnector.DetachListener
         System.out.println("Detach called!");
     }
 
-    @WebServlet(value = "/*", asyncSupported = true)
+    @WebServlet(value = { "/*", "/VAADIN/*" }, asyncSupported = true)
     @VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class, widgetset = "rs.pupin.jpo.validation.AppWidgetSet", heartbeatInterval = 120)
     public static class Servlet extends VaadinServlet {
     }
