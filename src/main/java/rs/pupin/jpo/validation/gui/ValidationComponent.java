@@ -42,6 +42,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     private HorizontalSplitPanel splitPanel;
     private VerticalLayout contentLayout;
     private final HashMap<ICQuery, IntegrityConstraintComponent> icHash;
+    private Button btnRDFUnit;
     
     public ValidationComponent(Repository repository, String endpoint, String graph){
         this.repository = repository;
@@ -95,6 +96,8 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         btnSettings = new Button("Settings");
         btnClearAll = new Button("Clear");
         btnEvalAll = new Button("Evaluate All");
+        btnRDFUnit = new Button("RDFUnit Validation");
+        headerLayout.addComponent(btnRDFUnit);
         headerLayout.addComponent(btnClearAll);
         headerLayout.addComponent(btnEvalAll);
         headerLayout.addComponent(btnSettings);
@@ -170,7 +173,8 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                     @Override
                     public void windowClose(Window.CloseEvent e) {
                         try {
-                            repository.shutDown();
+                            if (!endpoint.equals(state.endpoint) || !graph.equals(state.graph))
+                                repository.shutDown();
                         } catch (RepositoryException ex) {
                             Logger.getLogger(ValidationComponent.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -182,6 +186,13 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                         }
                     }
                 });
+                getUI().addWindow(w);
+            }
+        });
+        btnRDFUnit.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Window w = new RDFUnitWindow(repository, graph);
                 getUI().addWindow(w);
             }
         });
