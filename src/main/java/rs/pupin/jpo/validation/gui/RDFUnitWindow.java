@@ -5,6 +5,7 @@
  */
 package rs.pupin.jpo.validation.gui;
 
+import com.hp.hpl.jena.rdf.model.Model;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
@@ -14,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.aksw.rdfunit.validate.wrappers.RDFUnitStaticWrapper;
 import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -45,15 +47,15 @@ public class RDFUnitWindow extends Window {
         this.graph = graph;
         
         setModal(true);
-//        setClosable(false);
         setResizable(false);
         setDraggable(false);
-        setSizeFull();
+        setWidth("90%");
+        setHeight("90%");
         
         layout = new VerticalLayout();
         layout.setMargin(true);
-        layout.setSizeFull();
         layout.setSpacing(true);
+        layout.setSizeFull();
         setContent(layout);
     }
 
@@ -62,6 +64,7 @@ public class RDFUnitWindow extends Window {
         super.attach(); 
         Label lbl = new Label("RDFUnit validation");
         layout.addComponent(lbl);
+        layout.setExpandRatio(lbl, 0.0f);
         
         btnValidate = new Button("Validate");
         btnValidate.addClickListener(new Button.ClickListener() {
@@ -75,9 +78,11 @@ public class RDFUnitWindow extends Window {
             }
         });
         layout.addComponent(btnValidate);
+        layout.setExpandRatio(btnValidate, 0.0f);
         
         statusLabel = new Label("Click execute to validate the graph with RDFUnit");
         layout.addComponent(statusLabel);
+        layout.setExpandRatio(statusLabel, 2.0f);
     }
     
     private void createFile(){
@@ -117,6 +122,8 @@ public class RDFUnitWindow extends Window {
     
     private void validate(){
         throw new UnsupportedOperationException("Not implemented yet");
+        // TODO
+        
     }
     
 }

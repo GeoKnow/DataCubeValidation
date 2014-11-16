@@ -29,6 +29,11 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+                <repository>
+                    <id>maven.aksw.internal</id>
+                    <name>University Leipzig, AKSW Maven2 Repository</name>
+                    <url>http://maven.aksw.org/archiva/repository/internal</url>
+                </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -104,6 +109,11 @@
                     <groupId>org.openrdf.sesame</groupId>
                     <artifactId>sesame-rio-turtle</artifactId>
                     <version>${sesame.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.aksw.rdfunit</groupId>
+                    <artifactId>rdfunit-validate</artifactId>
+                    <version>0.7.1</version>
                 </dependency>
         </dependencies>
 

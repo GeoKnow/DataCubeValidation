@@ -18,6 +18,7 @@ import com.vaadin.ui.Window;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.aksw.rdfunit.validate.wrappers.RDFUnitStaticWrapper;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import rs.pupin.jpo.validation.gui.constraints.*;
@@ -43,6 +44,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     private VerticalLayout contentLayout;
     private final HashMap<ICQuery, IntegrityConstraintComponent> icHash;
     private Button btnRDFUnit;
+    private Button btnRefresh;
     
     public ValidationComponent(Repository repository, String endpoint, String graph){
         this.repository = repository;
@@ -97,6 +99,8 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         btnClearAll = new Button("Clear");
         btnEvalAll = new Button("Evaluate All");
         btnRDFUnit = new Button("RDFUnit Validation");
+        btnRefresh = new Button("Refresh");
+        headerLayout.addComponent(btnRefresh);
         headerLayout.addComponent(btnRDFUnit);
         headerLayout.addComponent(btnClearAll);
         headerLayout.addComponent(btnEvalAll);
@@ -104,7 +108,6 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     }
     
     private void createConstraints(){
-        // TODO create tree items
         addIC(new Summary(repository, graph));
         addIC(new Provenance(repository, graph));
         addIC(new IC01(repository, graph));
@@ -133,7 +136,8 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 ICQuery ic = (ICQuery)event.getProperty().getValue();
-                ic.eval();
+                if (ic.getStatus() == ICQuery.Status.NEW) ic.eval();
+                else icQueryChanged(ic);
             }
         });
     }
@@ -196,6 +200,14 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                 getUI().addWindow(w);
             }
         });
+        btnRefresh.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                Object selection = criteriaTree.getValue();
+                if (selection == null) return;
+                ((ICQuery)selection).eval();
+            }
+        });
     }
 
     @Override
@@ -206,13 +218,13 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
 
     @Override
     public void attach() {
+        RDFUnitStaticWrapper.initWrapper("file:///tmp/", "data-cube-validation-" + getUI().hashCode() + ".ttl");
         createUI();
         System.out.println("Attach called!");
     }
 
     @Override
     public void icQueryChanged(ICQuery ic) {
-        // TODO implement properly, aka add appropriate IntegrityConstraintComponent
         contentLayout.removeAllComponents();
         IntegrityConstraintComponent icComponent = icHash.get(ic);
         contentLayout.addComponent(icComponent);

@@ -41,7 +41,7 @@ public class Summary extends IntegrityConstraintComponent {
 
             @Override
             public Status getStatus() {
-                return null;
+                return Status.NEW;
             }
 
             @Override

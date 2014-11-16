@@ -1,0 +1,2 @@
+had account for the Virtuoso bug in rs.pupin.jpo.validation.gui.RDFUnitWindow
+    see https://github.com/tinkerpop/blueprints/issues/464, comment by joshsh
