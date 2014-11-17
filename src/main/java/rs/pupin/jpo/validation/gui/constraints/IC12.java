@@ -39,7 +39,7 @@ public class IC12 extends IntegrityConstraintComponent {
 
     @Override
     public String getName() {
-        return "IC-11 All dimensions required";
+        return "IC-12 No duplicate observations";
     }
 
     @Override
@@ -92,7 +92,8 @@ public class IC12 extends IntegrityConstraintComponent {
         ls2.setWidth("100%");
         rootLayout.addComponent(ls2);
 
-        ls1.addListener(new Property.ValueChangeListener() {
+        ls1.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 ls2.removeAllItems();
                 for (String duplicate : mapDuplicates.get(event.getProperty().getValue())) {
@@ -116,7 +117,8 @@ public class IC12 extends IntegrityConstraintComponent {
         panelLayout.addComponent(fix);
         panelLayout.setExpandRatio(fix, 2.0f);
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String obsString = (String) ls1.getValue();
                 if (obsString == null || obsString.isEmpty()) {

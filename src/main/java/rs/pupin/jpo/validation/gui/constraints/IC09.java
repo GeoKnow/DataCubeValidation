@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -76,7 +77,7 @@ public class IC09 extends IntegrityConstraintComponent {
             BindingSet set = res.next();
             listSlices.add(set.getValue("slice").stringValue());
         }
-        if (listSlices.size() == 0) {
+        if (listSlices.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - either there are no slices or every slice has a unique structure, i.e. exactly one associated slice key (via property qb:sliceStructure)");
             rootLayout.addComponent(label);
@@ -109,7 +110,7 @@ public class IC09 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue("After the fix, slice chosen above will be associated with the slice key chosen in the below combo box, "
                 + "or the problematic slice can be edited manuallz in OntoWiki");
         panelLayout.addComponent(fixLabel);
@@ -126,12 +127,14 @@ public class IC09 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }
         });
-        lsSlices.addListener(new Property.ValueChangeListener() {
+        lsSlices.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String) event.getProperty().getValue());
                 int i = 1;
@@ -140,14 +143,15 @@ public class IC09 extends IntegrityConstraintComponent {
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object[]{set.getValue("p").stringValue(),
-                            set.getValue("o").stringValue()}, new Integer(i++));
+                            set.getValue("o").stringValue()}, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();
                 }
             }
         });
-        lsSlices.addListener(new Property.ValueChangeListener() {
+        lsSlices.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String slice = event.getProperty().toString();
                 comboKeys.removeAllItems();
@@ -161,7 +165,8 @@ public class IC09 extends IntegrityConstraintComponent {
                 }
             }
         });
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 Object selKey = comboKeys.getValue();
                 Object selSlice = lsSlices.getValue();

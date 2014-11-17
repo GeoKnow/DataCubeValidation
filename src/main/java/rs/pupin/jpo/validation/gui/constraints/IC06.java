@@ -5,6 +5,7 @@
  */
 package rs.pupin.jpo.validation.gui.constraints;
 
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
@@ -68,7 +69,7 @@ public class IC06 extends IntegrityConstraintComponent {
             compMap.put(set.getValue("component").stringValue(), set.getValue("dsd").stringValue());
         }
 
-        if (compMap.size() == 0) {
+        if (compMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - if there are any optional components, they are attributes");
             rootLayout.addComponent(label);
@@ -89,7 +90,7 @@ public class IC06 extends IntegrityConstraintComponent {
         detailsTable.addContainerProperty("Property", String.class, null);
         detailsTable.addContainerProperty("Object", String.class, null);
         rootLayout.addComponent(detailsTable);
-        listComponents.addListener(new DetailsListener(detailsTable));
+        listComponents.addValueChangeListener(new DetailsListener(detailsTable));
 
 //		final Label lblProblem = new Label("<b>Problem description: </b>", Label.CONTENT_XHTML);
 //		validationTab.addComponent(lblProblem);
@@ -104,7 +105,7 @@ public class IC06 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue(""); // TODO
         panelLayout.addComponent(fixLabel);
         HorizontalLayout btnLayout = new HorizontalLayout();
@@ -118,7 +119,8 @@ public class IC06 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        removeCompReq.addListener(new Button.ClickListener() {
+        removeCompReq.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String chosenComponent = (String) listComponents.getValue();
                 if (chosenComponent == null) {
@@ -135,7 +137,8 @@ public class IC06 extends IntegrityConstraintComponent {
                 icQuery.eval();
             }
         });
-        turnToAttr.addListener(new Button.ClickListener() {
+        turnToAttr.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String chosenComponent = (String) listComponents.getValue();
                 if (chosenComponent == null) {
@@ -153,7 +156,8 @@ public class IC06 extends IntegrityConstraintComponent {
                 icQuery.eval();
             }
         });
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }

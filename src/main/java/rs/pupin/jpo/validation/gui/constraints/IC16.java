@@ -78,7 +78,7 @@ public class IC16 extends IntegrityConstraintComponent {
             obsMap.put(set.getValue("obs").stringValue(), pair);
         }
 
-        if (obsMap.size() == 0) {
+        if (obsMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - In Data Sets that use a Measure dimension (if there are any) each Observation only has a value for one measure");
             rootLayout.addComponent(label);
@@ -98,7 +98,8 @@ public class IC16 extends IntegrityConstraintComponent {
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create a replacement
             }

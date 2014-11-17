@@ -51,12 +51,14 @@ public class IC19 extends IntegrityConstraintComponent {
             layoutButtons.addComponent(btnCancel);
 
             btnCancel.addClickListener(new Button.ClickListener() {
+                @Override
                 public void buttonClick(Button.ClickEvent event) {
                     close();
                 }
             });
 
             btnOK.addClickListener(new Button.ClickListener() {
+                @Override
                 public void buttonClick(Button.ClickEvent event) {
                     if (resource == null || resource.isEmpty()) {
                         return;
@@ -125,7 +127,7 @@ public class IC19 extends IntegrityConstraintComponent {
             map.put(set.getValue("v").stringValue(), set.getValue("list").stringValue());
         }
 
-        if (map.size() == 0) {
+        if (map.isEmpty()) {
             Label label = new Label();
             label.setValue("All values of coded dimensions are linked to the code lists");
             rootLayout.addComponent(label);
@@ -142,6 +144,7 @@ public class IC19 extends IntegrityConstraintComponent {
 
         Button editInOW = new Button("Edit in OntoWiki");
         editInOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create a replacement
             }
@@ -156,6 +159,7 @@ public class IC19 extends IntegrityConstraintComponent {
         buttonsLayout.addComponent(fix);
         buttonsLayout.addComponent(editInOW);
         fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String resource = (String) listValues.getValue();
                 String codeList = map.get(resource);

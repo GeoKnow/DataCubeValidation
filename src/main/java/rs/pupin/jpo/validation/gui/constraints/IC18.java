@@ -71,7 +71,7 @@ public class IC18 extends IntegrityConstraintComponent {
             obsMap.put(set.getValue("obs").stringValue(), pair);
         }
 
-        if (obsMap.size() == 0) {
+        if (obsMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - If a qb:DataSet D has a qb:slice S, and S has an qb:observation O, then the qb:dataSet corresponding to O must be D");
             rootLayout.addComponent(label);
@@ -91,7 +91,8 @@ public class IC18 extends IntegrityConstraintComponent {
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create a replacement
             }

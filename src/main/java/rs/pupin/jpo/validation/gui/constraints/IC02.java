@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -79,7 +80,7 @@ public class IC02 extends IntegrityConstraintComponent {
             map.put(set.getValue("dataSet").stringValue(), set.getValue("dsdNum").stringValue());
         }
 
-        if (map.size() == 0) {
+        if (map.isEmpty()) {
             Label label = new Label();
             label.setValue("All data sets have exactly one link to the DSD");
             rootLayout.addComponent(label);
@@ -103,7 +104,7 @@ public class IC02 extends IntegrityConstraintComponent {
         detailsTable.addContainerProperty("Object", String.class, null);
         rootLayout.addComponent(detailsTable);
 
-        final Label lblProblem = new Label("<b>Problem description: </b>", Label.CONTENT_XHTML);
+        final Label lblProblem = new Label("<b>Problem description: </b>", ContentMode.HTML);
         rootLayout.addComponent(lblProblem);
 
         Button editInOW = new Button("Edit in OntoWiki");
@@ -131,7 +132,8 @@ public class IC02 extends IntegrityConstraintComponent {
         panelLayout.addComponent(buttonsLayout);
         panelLayout.setExpandRatio(buttonsLayout, 2.0f);
 
-        listDataSets.addListener(new Property.ValueChangeListener() {
+        listDataSets.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String) event.getProperty().getValue());
                 int i = 1;
@@ -140,7 +142,7 @@ public class IC02 extends IntegrityConstraintComponent {
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object[]{set.getValue("p").stringValue(),
-                            set.getValue("o").stringValue()}, new Integer(i++));
+                            set.getValue("o").stringValue()}, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();
@@ -151,17 +153,18 @@ public class IC02 extends IntegrityConstraintComponent {
             }
         });
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String chosenDSD = (String) comboDSDs.getValue();
                 String dataSet = (String) listDataSets.getValue();
 
                 if (chosenDSD == null) {
-                    Notification.show("DSD was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("DSD was not selected", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 if (dataSet == null) {
-                    Notification.show("Data set was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Data set was not selected", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
 

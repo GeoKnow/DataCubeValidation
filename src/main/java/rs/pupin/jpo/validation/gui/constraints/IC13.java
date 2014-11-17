@@ -5,6 +5,7 @@
  */
 package rs.pupin.jpo.validation.gui.constraints;
 
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
@@ -69,7 +70,7 @@ public class IC13 extends IntegrityConstraintComponent {
             obsMap.put(set.getValue("obs").stringValue(), set.getValue("attr").stringValue());
         }
 
-        if (obsMap.size() == 0) {
+        if (obsMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - Every qb:Observation has a value for each declared attribute that is marked as required");
             rootLayout.addComponent(label);
@@ -96,7 +97,7 @@ public class IC13 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue(""); // TODO
         panelLayout.addComponent(fixLabel);
 
@@ -109,8 +110,9 @@ public class IC13 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        removeRequired.addListener(new Button.ClickListener() {
+        removeRequired.addClickListener(new Button.ClickListener() {
 
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String chosenObs = (String) listObservations.getValue();
                 if (chosenObs == null) {
@@ -128,7 +130,8 @@ public class IC13 extends IntegrityConstraintComponent {
                 icQuery.eval();
             }
         });
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }

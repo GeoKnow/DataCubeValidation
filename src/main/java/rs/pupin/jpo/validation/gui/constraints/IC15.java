@@ -64,7 +64,7 @@ public class IC15 extends IntegrityConstraintComponent {
             obsMap.put(set.getValue("obs").stringValue(), set.getValue("measure").stringValue());
         }
 
-        if (obsMap.size() == 0) {
+        if (obsMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - In Data Sets that a Measure dimension (if there are any) each Observation has a value for the measure corresponding to its given qb:measureType");
             rootLayout.addComponent(label);
@@ -84,7 +84,8 @@ public class IC15 extends IntegrityConstraintComponent {
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // create replacement
             }

@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
@@ -82,7 +83,7 @@ public class IC10 extends IntegrityConstraintComponent {
         if (lastSlice != null) {
             map.put(lastSlice, lastDimensions);
         }
-        if (map.size() == 0) {
+        if (map.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - either there are no slices or every slice has a value for every dimension declared in its associated slice key (via property qb:sliceStructure)");
             rootLayout.addComponent(label);
@@ -104,18 +105,20 @@ public class IC10 extends IntegrityConstraintComponent {
         detailsTable.addContainerProperty("Object", String.class, null);
         rootLayout.addComponent(detailsTable);
 
-        final Label lblProblem = new Label("<b>Problem description: </b>", Label.CONTENT_XHTML);
+        final Label lblProblem = new Label("<b>Problem description: </b>", ContentMode.HTML);
         rootLayout.addComponent(lblProblem);
 
         Button editInOW = new Button("Edit in OntoWiki");
         rootLayout.addComponent(editInOW);
 
-        editInOW.addListener(new Button.ClickListener() {
+        editInOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }
         });
-        lsSlices.addListener(new Property.ValueChangeListener() {
+        lsSlices.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String slice = (String) event.getProperty().getValue();
                 TupleQueryResult res = getResourceProperties(slice);
@@ -125,7 +128,7 @@ public class IC10 extends IntegrityConstraintComponent {
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object[]{set.getValue("p").stringValue(),
-                            set.getValue("o").stringValue()}, new Integer(i++));
+                            set.getValue("o").stringValue()}, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();

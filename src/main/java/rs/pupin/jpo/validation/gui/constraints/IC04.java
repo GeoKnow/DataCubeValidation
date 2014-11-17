@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -70,7 +71,7 @@ public class IC04 extends IntegrityConstraintComponent {
             dimList.add(set.getValue("dim").stringValue());
         }
 
-        if (dimList.size() == 0) {
+        if (dimList.isEmpty()) {
             Label label = new Label();
             label.setValue("All dimensions have a defined range");
             rootLayout.addComponent(label);
@@ -96,7 +97,7 @@ public class IC04 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue("After the fix, dimension chosen above will have a range chosen in the combo box below. "
                 + "Alternatively, the problematic dimension can be edited manually in OntoWiki");
         panelLayout.addComponent(fixLabel);
@@ -113,12 +114,14 @@ public class IC04 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO replacement
             }
         });
-        listDimensions.addListener(new Property.ValueChangeListener() {
+        listDimensions.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String dim = event.getProperty().getValue().toString();
                 String query = ValidationFixUtils.ic04_getMathingRange(graph, dim);
@@ -133,7 +136,7 @@ public class IC04 extends IntegrityConstraintComponent {
                 }
             }
         });
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent event) {
                 Object selDim = listDimensions.getValue();
                 Object selType = comboType.getValue();

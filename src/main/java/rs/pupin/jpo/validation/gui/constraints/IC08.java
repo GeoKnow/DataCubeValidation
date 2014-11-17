@@ -68,7 +68,7 @@ public class IC08 extends IntegrityConstraintComponent {
             BindingSet set = res.next();
             listSliceKeys.add(set.getValue("sliceKey").stringValue());
         }
-        if (listSliceKeys.size() == 0) {
+        if (listSliceKeys.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - either there are no slice keys or all slice keys are consistent with associated DSD, i.e. for every slice key holds: "
                     + "every component property of the slice key is also declared as a component of the associated DSD");
@@ -98,12 +98,14 @@ public class IC08 extends IntegrityConstraintComponent {
         Button editInOW = new Button("Edit in OntoWiki");
         rootLayout.addComponent(editInOW);
 
-        editInOW.addListener(new Button.ClickListener() {
+        editInOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }
         });
-        lsSliceKeys.addListener(new Property.ValueChangeListener() {
+        lsSliceKeys.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String) event.getProperty().getValue());
                 int i = 1;
@@ -112,7 +114,7 @@ public class IC08 extends IntegrityConstraintComponent {
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object[]{set.getValue("p").stringValue(),
-                            set.getValue("o").stringValue()}, new Integer(i++));
+                            set.getValue("o").stringValue()}, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();

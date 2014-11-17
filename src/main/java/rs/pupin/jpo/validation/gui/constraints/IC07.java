@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -72,7 +73,7 @@ public class IC07 extends IntegrityConstraintComponent {
             BindingSet set = res.next();
             listSliceKeys.add(set.getValue("sliceKey").stringValue());
         }
-        if (listSliceKeys.size() == 0) {
+        if (listSliceKeys.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - either there are no slice keys or every slice key is associated with a DSD");
             rootLayout.addComponent(label);
@@ -105,7 +106,7 @@ public class IC07 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue("After the fix, slice key chosen above will be associated with the DSD chosen below, or you can edit the slice key manually.");
         panelLayout.addComponent(fixLabel);
         final ComboBox comboDSDs = new ComboBox();
@@ -121,12 +122,14 @@ public class IC07 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create replacement
             }
         });
-        lsSliceKeys.addListener(new Property.ValueChangeListener() {
+        lsSliceKeys.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String) event.getProperty().getValue());
                 int i = 1;
@@ -135,14 +138,15 @@ public class IC07 extends IntegrityConstraintComponent {
                     while (res.hasNext()) {
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object[]{set.getValue("p").stringValue(),
-                            set.getValue("o").stringValue()}, new Integer(i++));
+                            set.getValue("o").stringValue()}, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();
                 }
             }
         });
-        lsSliceKeys.addListener(new Property.ValueChangeListener() {
+        lsSliceKeys.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String sk = event.getProperty().getValue().toString();
                 if (sk == null || sk.equalsIgnoreCase("")) {
@@ -160,7 +164,8 @@ public class IC07 extends IntegrityConstraintComponent {
                 }
             }
         });
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 Object selVal = comboDSDs.getValue();
                 if (selVal == null) {

@@ -89,7 +89,7 @@ public class IC17 extends IntegrityConstraintComponent {
             obsMap.put(set.getValue("obs1").stringValue(), pair);
         }
 
-        if (obsMap.size() == 0) {
+        if (obsMap.isEmpty()) {
             Label label = new Label();
             label.setValue("No problems were detected - In a data set which uses a measure dimension then "
                     + "if there is an Observation for some combination of non-measure dimensions then "
@@ -113,7 +113,8 @@ public class IC17 extends IntegrityConstraintComponent {
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
-        fix.addListener(new Button.ClickListener() {
+        fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create a replacement
             }

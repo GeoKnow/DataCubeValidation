@@ -45,7 +45,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     
     protected class DetailsListener implements Property.ValueChangeListener {
 
-        private Table tbl;
+        private final Table tbl;
 
         public DetailsListener(Table tbl) {
             this.tbl = tbl;
@@ -60,7 +60,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
                 while (res.hasNext()) {
                     BindingSet set = res.next();
                     tbl.addItem(new Object[]{set.getValue("p").stringValue(),
-                        set.getValue("o").stringValue()}, new Integer(i++));
+                        set.getValue("o").stringValue()}, i++);
                 }
             } catch (QueryEvaluationException e) {
                 e.printStackTrace();
@@ -99,6 +99,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         this.statusMapper = statusMapper;
     }
     
+    @Override
     public ThemeResource getIcon(){
         return statusMapper.map(getStatus());
     }
@@ -171,6 +172,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
             con.add(statements, graphURI);
         } catch (RepositoryException e) {
             e.printStackTrace();
+            // inform user that the query failed and how to do it manually
         }
     }
 	

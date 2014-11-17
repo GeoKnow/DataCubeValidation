@@ -83,7 +83,7 @@ public class IC20 extends IntegrityConstraintComponent {
             map.put(set.getValue("dim").stringValue(), set.getValue("p").stringValue());
         }
 
-        if (map.size() == 0) {
+        if (map.isEmpty()) {
             Label label = new Label();
             label.setValue("All values of hierarchical dimensions with a non-blank qb:parentChildProperty are reachable from a root of the hierarchy");
             rootLayout.addComponent(label);
@@ -99,7 +99,8 @@ public class IC20 extends IntegrityConstraintComponent {
         rootLayout.addComponent(listValues);
 
         Button editInOW = new Button("Edit in OntoWiki");
-        editInOW.addListener(new Button.ClickListener() {
+        editInOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO create a replacement
             }

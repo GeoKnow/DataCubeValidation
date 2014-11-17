@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -74,7 +75,7 @@ public class IC03 extends IntegrityConstraintComponent {
             dsdList.add(set.getValue("dsd").stringValue());
         }
 
-        if (dsdList.size() == 0) {
+        if (dsdList.isEmpty()) {
             Label label = new Label();
             label.setValue("All DSDs contain at least one measure");
             rootLayout.addComponent(label);
@@ -100,7 +101,7 @@ public class IC03 extends IntegrityConstraintComponent {
         rootLayout.setExpandRatio(panelQuickFix, 2.0f);
 
         Label fixLabel = new Label();
-        fixLabel.setContentMode(Label.CONTENT_XHTML);
+        fixLabel.setContentMode(ContentMode.HTML);
         fixLabel.setValue("After the fix, component selected in the combo box below will be turned to measure, "
                 + "or you can choose to edit the above selected DSD manually in OntoWiki");
         panelLayout.addComponent(fixLabel);
@@ -117,7 +118,8 @@ public class IC03 extends IntegrityConstraintComponent {
         panelLayout.addComponent(btnLayout);
         panelLayout.setExpandRatio(btnLayout, 2.0f);
 
-        listDSDs.addListener(new Property.ValueChangeListener() {
+        listDSDs.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 String dsd = event.getProperty().getValue().toString();
                 if (dsd == null || dsd.equalsIgnoreCase("")) {
@@ -135,7 +137,8 @@ public class IC03 extends IntegrityConstraintComponent {
                 }
             }
         });
-        turnToMeasure.addListener(new Button.ClickListener() {
+        turnToMeasure.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 Object selVal = comboComponents.getValue();
                 if (selVal == null) {
@@ -146,13 +149,11 @@ public class IC03 extends IntegrityConstraintComponent {
                 executeGraphQuery(ValidationFixUtils.ic03_turnToMeasure(graph, selVal.toString()));
                 executeGraphQuery(ValidationFixUtils.ic03_turnToMeasure2(graph, selVal.toString()));
                 Notification.show("Fix executed");
-//				icMeasuresInDSD.evaluate();
-//				updateItemIcon(icMeasuresInDSD);
-                // update GUI after modification
                 icQuery.eval();
             }
         });
-        editOW.addListener(new Button.ClickListener() {
+        editOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO make replacement
             }

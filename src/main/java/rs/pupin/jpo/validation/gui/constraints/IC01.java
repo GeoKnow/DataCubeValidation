@@ -6,6 +6,7 @@
 package rs.pupin.jpo.validation.gui.constraints;
 
 import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
@@ -103,7 +104,7 @@ public class IC01 extends IntegrityConstraintComponent {
         detailsTable.addContainerProperty("Object", String.class, null);
         rootLayout.addComponent(detailsTable);
 		
-        final Label lblProblem = new Label("<b>Problem description: </b>", Label.CONTENT_XHTML);
+        final Label lblProblem = new Label("<b>Problem description: </b>", ContentMode.HTML);
         rootLayout.addComponent(lblProblem);
 		
         Button editInOW = new Button("TODO: Show details");
@@ -136,6 +137,7 @@ public class IC01 extends IntegrityConstraintComponent {
         panelLayout.setExpandRatio(buttonsLayout, 2.0f);
 		
         listObs.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 TupleQueryResult res = getResourceProperties((String)event.getProperty().getValue());
                 int i=1;
@@ -144,7 +146,7 @@ public class IC01 extends IntegrityConstraintComponent {
                     while (res.hasNext()){
                         BindingSet set = res.next();
                         detailsTable.addItem(new Object [] { set.getValue("p").stringValue(),
-                                set.getValue("o").stringValue() }, new Integer(i++));
+                                set.getValue("o").stringValue() }, i++);
                     }
                 } catch (QueryEvaluationException e) {
                     e.printStackTrace();
@@ -156,16 +158,17 @@ public class IC01 extends IntegrityConstraintComponent {
         });
 		
         fix.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 String chosenDataSet = (String)comboDataSets.getValue();
                 String observation = (String)listObs.getValue();
 
                 if (chosenDataSet == null) {
-                    Notification.show("DataSet was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("DataSet was not selected", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
                 if (observation == null) {
-                    Notification.show("Observation was not selected", Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Observation was not selected", Notification.Type.ERROR_MESSAGE);
                     return;
                 }
 
