@@ -8,6 +8,7 @@ package rs.pupin.jpo.validation.gui.constraints;
 import com.vaadin.data.Property;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.util.ArrayList;
@@ -252,6 +253,29 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
             e.printStackTrace();
         } catch (QueryEvaluationException e) {
             e.printStackTrace();
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            getUI().addWindow(new FailedQueryWindow(query));
+        }
+        return null;
+    }
+    
+    protected GraphQueryResult executeDoubleGraphQuery(String query1, String query2) {
+        try {
+            RepositoryConnection con = repository.getConnection();
+            GraphQuery graphQuery1 = con.prepareGraphQuery(QueryLanguage.SPARQL, query1);
+            GraphQueryResult result1 = graphQuery1.evaluate();
+            
+            GraphQuery graphQuery2 = con.prepareGraphQuery(QueryLanguage.SPARQL, query2);
+            GraphQueryResult result2 = graphQuery2.evaluate();
+            
+            return result2;
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (MalformedQueryException e) {
+            e.printStackTrace();
+        } catch (QueryEvaluationException e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            getUI().addWindow(new FailedQueryWindow(query1, query2));
         }
         return null;
     }

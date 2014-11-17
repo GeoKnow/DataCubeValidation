@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
@@ -148,13 +149,12 @@ public class IC05 extends IntegrityConstraintComponent {
                     return;
                 }
 
-                executeGraphQuery(ValidationFixUtils.ic05_insertCodeList(
+                GraphQueryResult fixRes = executeGraphQuery(ValidationFixUtils.ic05_insertCodeList(
                         graph, selDim.toString(), selList.toString()));
-                Notification.show("Fix executed");
-//				icDimsHaveCodeLists.evaluate();
-//				updateItemIcon(icDimsHaveCodeLists);
-                // update GUI, aka evaluate again, after the fix
-                icQuery.eval();
+                if (fixRes != null) {
+                    Notification.show("Fix executed");
+                    icQuery.eval();
+                }
             }
         });
     }

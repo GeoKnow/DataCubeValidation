@@ -19,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
@@ -172,12 +173,14 @@ public class IC07 extends IntegrityConstraintComponent {
                     Notification.show("No DSD was selected");
                     return;
                 }
-                executeGraphQuery(ValidationFixUtils.ic07_insertConnection(graph,
+                GraphQueryResult fixRes = executeGraphQuery(ValidationFixUtils.ic07_insertConnection(graph,
                         selVal.toString(), lsSliceKeys.getValue().toString()));
 
-                Notification.show("Fix executed");
-                // evaluate again thereby also updating the GUI
-                icQuery.eval();
+                if (fixRes != null) {
+                    Notification.show("Fix executed");
+                    // evaluate again thereby also updating the GUI
+                    icQuery.eval();
+                }
             }
         });
     }

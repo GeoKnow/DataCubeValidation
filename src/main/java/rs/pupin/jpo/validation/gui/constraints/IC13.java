@@ -16,6 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.repository.Repository;
 import rs.pupin.jpo.validation.ValidationFixUtils;
 import rs.pupin.jpo.validation.ic.ICQuery;
@@ -124,10 +125,12 @@ public class IC13 extends IntegrityConstraintComponent {
                 String query = ValidationFixUtils.ic13_removeComponentRequiredTrue(graph,
                         chosenObs,
                         obsMap.get(chosenObs));
-                executeGraphQuery(query);
-                Notification.show("Fix executed");
-                // evaluate again after the fix
-                icQuery.eval();
+                GraphQueryResult fixRes = executeGraphQuery(query);
+                if (fixRes != null) { 
+                    Notification.show("Fix executed");
+                    // evaluate again after the fix
+                    icQuery.eval();
+                }
             }
         });
         editOW.addClickListener(new Button.ClickListener() {

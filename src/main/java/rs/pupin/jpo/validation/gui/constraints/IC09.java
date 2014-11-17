@@ -19,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
@@ -175,11 +176,13 @@ public class IC09 extends IntegrityConstraintComponent {
                     return;
                 }
 
-                executeGraphQuery(ValidationFixUtils.ic09_removeSliceKeys(graph, selSlice.toString()));
-                executeGraphQuery(ValidationFixUtils.ic09_insertSliceKey(graph, selSlice.toString(), selKey.toString()));
-                Notification.show("Fix executed");
-                // evaluate again after the fix
-                icQuery.eval();
+                GraphQueryResult resFix = executeDoubleGraphQuery(ValidationFixUtils.ic09_removeSliceKeys(graph, selSlice.toString()), 
+                        ValidationFixUtils.ic09_insertSliceKey(graph, selSlice.toString(), selKey.toString()));
+                if (resFix != null) {
+                    Notification.show("Fix executed");
+                    // evaluate again after the fix
+                    icQuery.eval();
+                }
             }
         });
     }

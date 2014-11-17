@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
@@ -145,11 +146,13 @@ public class IC04 extends IntegrityConstraintComponent {
                     return;
                 }
 
-                executeGraphQuery(ValidationFixUtils.ic04_insertRange(
+                GraphQueryResult fixRes = executeGraphQuery(ValidationFixUtils.ic04_insertRange(
                         graph, selDim.toString(), selType.toString()));
-                Notification.show("Fix executed");
-                // update GUI after the fix
-                icQuery.eval();
+                if (fixRes != null) {
+                    Notification.show("Fix executed");
+                    // update GUI after the fix
+                    icQuery.eval();
+                }
             }
         });
     }

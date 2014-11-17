@@ -17,6 +17,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.repository.Repository;
 import rs.pupin.jpo.validation.ValidationFixUtils;
 import rs.pupin.jpo.validation.ic.ICQuery;
@@ -131,10 +132,12 @@ public class IC06 extends IntegrityConstraintComponent {
                 }
                 String chosenDSD = compMap.get(chosenComponent);
                 String query = ValidationFixUtils.ic06_removeComponentRequired(graph, chosenDSD, chosenComponent);
-                executeGraphQuery(query);
-                Notification.show("Fix executed");
-                // evaluate again after the fix
-                icQuery.eval();
+                GraphQueryResult resFix = executeGraphQuery(query);
+                if (resFix != null) {
+                    Notification.show("Fix executed");
+                    // evaluate again after the fix
+                    icQuery.eval();
+                }
             }
         });
         turnToAttr.addClickListener(new Button.ClickListener() {
@@ -149,11 +152,12 @@ public class IC06 extends IntegrityConstraintComponent {
                 }
                 String query = ValidationFixUtils.ic06_changeToAttribute(graph, chosenComponent);
                 String query2 = ValidationFixUtils.ic06_changeToAttribute2(graph, chosenComponent);
-                executeGraphQuery(query);
-                executeGraphQuery(query2);
-                Notification.show("Fix executed");
-                // evaluate again after the fix
-                icQuery.eval();
+                GraphQueryResult resFix = executeDoubleGraphQuery(query, query2);
+                if (resFix != null) {
+                    Notification.show("Fix executed");
+                    // evaluate again after the fix
+                    icQuery.eval();
+                }
             }
         });
         editOW.addClickListener(new Button.ClickListener() {
