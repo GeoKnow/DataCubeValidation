@@ -102,7 +102,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         btnRefresh = new Button("Refresh");
         headerLayout.addComponent(btnRefresh);
         headerLayout.addComponent(btnRDFUnit);
-        headerLayout.addComponent(btnClearAll);
+//        headerLayout.addComponent(btnClearAll);
         headerLayout.addComponent(btnEvalAll);
         headerLayout.addComponent(btnSettings);
     }
@@ -208,6 +208,12 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                 ((ICQuery)selection).eval();
             }
         });
+        btnEvalAll.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                for (ICQuery ic: icHash.keySet()) ic.eval();
+            }
+        });
     }
 
     @Override
@@ -225,6 +231,11 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
 
     @Override
     public void icQueryChanged(ICQuery ic) {
+        if (!ic.equals(criteriaTree.getValue())) {
+            criteriaTree.setItemIcon(ic, icHash.get(ic).getIcon());
+            return;
+        }
+        
         contentLayout.removeAllComponents();
         IntegrityConstraintComponent icComponent = icHash.get(ic);
         contentLayout.addComponent(icComponent);
