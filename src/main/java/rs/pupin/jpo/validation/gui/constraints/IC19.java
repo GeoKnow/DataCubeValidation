@@ -113,10 +113,12 @@ public class IC19 extends IntegrityConstraintComponent {
     @Override
     public void generateGUI() {
         rootLayout.removeAllComponents();
+        
         final Iterator<BindingSet> res = icQuery.getResults();
-        if (res == null) {
+        
+        if (icQuery.getStatus() == ICQuery.Status.ERROR) {
             Label label = new Label();
-            label.setValue("ERROR");
+            label.setValue("ERROR \n" + icQuery.getErrorMessage());
             rootLayout.addComponent(label);
             return;
         }

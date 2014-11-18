@@ -62,9 +62,9 @@ public class IC16 extends IntegrityConstraintComponent {
             String omeasure;
         }
 
-        if (res == null) {
+        if (icQuery.getStatus() == ICQuery.Status.ERROR) {
             Label label = new Label();
-            label.setValue("ERROR");
+            label.setValue("ERROR \n" + icQuery.getErrorMessage());
             rootLayout.addComponent(label);
             return;
         }

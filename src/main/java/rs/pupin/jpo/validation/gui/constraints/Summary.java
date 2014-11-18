@@ -48,6 +48,11 @@ public class Summary extends IntegrityConstraintComponent {
             public Iterator<BindingSet> getResults() {
                 return null;
             }
+
+            @Override
+            public String getErrorMessage() {
+                return null;
+            }
         };
         return ic;
     }
@@ -66,25 +71,33 @@ public class Summary extends IntegrityConstraintComponent {
         sb.append("Therefore, this page only detects if some resources are missing, for more information, e.g. ");
         sb.append(" missing links refer to other validation criteria.");
         sb.append("<p>Summary information: <ul><li>");
-        if (obsList.isEmpty()) {
-            sb.append("ERROR - the graph is missing observations");
+        
+        if (obsList == null || dsList == null || dsdList == null) {
+            sb.append("ERROR - the endpoint could not be queries");
+            sb.append("</li></ul></p>");
         } else {
-            sb.append("There are ").append(obsList.size()).append(" observations");
+        
+            if (obsList.isEmpty()) {
+                sb.append("ERROR - the graph is missing observations");
+            } else {
+                sb.append("There are ").append(obsList.size()).append(" observations");
+            }
+            sb.append("</li><li>");
+            if (dsList.isEmpty()) {
+                sb.append("ERROR - the graph is missing data sets");
+            } else {
+                sb.append("There are ").append(dsList.size()).append(" data sets");
+            }
+            sb.append("</li><li>");
+            if (dsdList.isEmpty()) {
+                sb.append("ERROR - the graph is missing data structure definitions");
+            } else {
+                sb.append("There are ").append(dsdList.size()).append(" data structure definitions");
+            }
+            sb.append("</li></ul></p>");
+//            sb.append("<p>TODO: add info about dimensions, maybe include pointers on cubeviz possibilities</p>");
+            
         }
-        sb.append("</li><li>");
-        if (dsList.isEmpty()) {
-            sb.append("ERROR - the graph is missing data sets");
-        } else {
-            sb.append("There are ").append(dsList.size()).append(" data sets");
-        }
-        sb.append("</li><li>");
-        if (dsdList.isEmpty()) {
-            sb.append("ERROR - the graph is missing data structure definitions");
-        } else {
-            sb.append("There are ").append(dsdList.size()).append(" data structure definitions");
-        }
-        sb.append("</li></ul></p>");
-        sb.append("<p>TODO: add info about dimensions, maybe include pointers on cubeviz possibilities</p>");
         label.setValue(sb.toString());
         rootLayout.addComponent(label);
     }

@@ -30,6 +30,7 @@ public abstract class ICQuery {
     }
     public abstract Status getStatus();
     public abstract Iterator<BindingSet> getResults();
+    public abstract String getErrorMessage();
     public void add(ICQuery q) {}
     public void remove(ICQuery q) {}
     public void addQueryListener(ICQueryListener listener){

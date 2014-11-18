@@ -60,4 +60,16 @@ public class ICQueryComposite extends ICQuery {
     public Iterator<BindingSet> getResults() {
         return resList.iterator();
     }
+
+    @Override
+    public String getErrorMessage() {
+        StringBuilder builder = new StringBuilder();
+        for (ICQuery q: list) {
+            String msg = q.getErrorMessage();
+            if (msg != null) builder.append(msg).append("\n");
+        }
+        
+        if (builder.length() == 0) return null;
+        else return builder.toString();
+    }
 }

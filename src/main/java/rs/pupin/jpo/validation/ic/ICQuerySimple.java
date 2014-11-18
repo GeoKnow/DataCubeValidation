@@ -29,6 +29,7 @@ public class ICQuerySimple extends ICQuery {
     private String query;
     private TupleQueryResult res;
     private List<BindingSet> resList = new LinkedList<BindingSet>();
+    private String errorMsg = null;
     
     public ICQuerySimple(Repository repository, String query){
         this.repository = repository;
@@ -50,6 +51,7 @@ public class ICQuerySimple extends ICQuery {
     @Override
     public List<BindingSet> evaluate(){
         try {
+            errorMsg = null;
             RepositoryConnection conn = repository.getConnection();
             res = conn.prepareTupleQuery(QueryLanguage.SPARQL, query).evaluate();
             resList.clear();
@@ -61,12 +63,15 @@ public class ICQuerySimple extends ICQuery {
         } catch (RepositoryException e) {
             e.printStackTrace();
             status = Status.ERROR;
+            errorMsg = e.getMessage();
         } catch (MalformedQueryException e) {
             e.printStackTrace();
             status = Status.ERROR;
+            errorMsg = e.getMessage();
         } catch (QueryEvaluationException e) {
             e.printStackTrace();
             status = Status.ERROR;
+            errorMsg = e.getMessage();
         }
         try { if (res!=null) res.close(); } catch (QueryEvaluationException e) {}
         return resList;
@@ -78,5 +83,9 @@ public class ICQuerySimple extends ICQuery {
     @Override
     public Iterator<BindingSet> getResults() {
         return resList.iterator();
+    }
+    @Override
+    public String getErrorMessage() {
+        return errorMsg;
     }
 }

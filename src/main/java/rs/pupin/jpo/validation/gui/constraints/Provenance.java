@@ -112,13 +112,15 @@ public class Provenance extends IntegrityConstraintComponent {
         Button editInOW = new Button("Edit in OntoWiki");
         rootLayout.addComponent(editInOW);
         rootLayout.setExpandRatio(editInOW, 2.0f);
-        editInOW.addListener(new Button.ClickListener() {
+        editInOW.addClickListener(new Button.ClickListener() {
+            @Override
             public void buttonClick(Button.ClickEvent event) {
                 // TODO do something here
             }
         });
 
-        combo.addListener(new Property.ValueChangeListener() {
+        combo.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 ArrayList<Value> list = map.get((String) event.getProperty().getValue());
                 table.removeAllItems();

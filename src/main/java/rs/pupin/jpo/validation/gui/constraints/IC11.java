@@ -50,6 +50,14 @@ public class IC11 extends IntegrityConstraintComponent {
     @Override
     public void generateGUI() {
         rootLayout.removeAllComponents();
+        
+        if (icQuery.getStatus() == ICQuery.Status.ERROR) {
+            Label label = new Label();
+            label.setValue("ERROR \n" + icQuery.getErrorMessage());
+            rootLayout.addComponent(label);
+            return;
+        }
+        
         rootLayout.addComponent(new Label("Following observation don't have a value for each dimension: "));
         Iterator<BindingSet> res = icQuery.getResults();
         ArrayList<String> listObs = new ArrayList<String>();

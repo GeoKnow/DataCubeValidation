@@ -62,6 +62,14 @@ public class IC12 extends IntegrityConstraintComponent {
     @Override
     public void generateGUI() {
         rootLayout.removeAllComponents();
+        
+        if (icQuery.getStatus() == ICQuery.Status.ERROR) {
+            Label label = new Label();
+            label.setValue("ERROR \n" + icQuery.getErrorMessage());
+            rootLayout.addComponent(label);
+            return;
+        }
+        
         rootLayout.addComponent(new Label("Following observations belong to the same data set and have the same value for all dimensions."));
 
         final ListSelect ls1 = new ListSelect("Observations");
