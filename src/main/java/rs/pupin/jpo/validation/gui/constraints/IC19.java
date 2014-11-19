@@ -81,8 +81,8 @@ public class IC19 extends IntegrityConstraintComponent {
         }
     }
 
-    public IC19(Repository repository, String graph) {
-        super(repository, graph);
+    public IC19(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -145,10 +145,11 @@ public class IC19 extends IntegrityConstraintComponent {
         rootLayout.addComponent(listValues);
 
         Button editInOW = new Button("Edit in OntoWiki");
+        editInOW.setEnabled(owUrl != null);
         editInOW.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // TODO create a replacement
+                editManually((String)listValues.getValue());
             }
         });
 

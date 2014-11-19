@@ -33,8 +33,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC05 extends IntegrityConstraintComponent {
 
-    public IC05(Repository repository, String graph) {
-        super(repository, graph);
+    public IC05(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -111,6 +111,7 @@ public class IC05 extends IntegrityConstraintComponent {
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);
         Button editOW = new Button("Edit in OntoWiki");
+        editOW.setEnabled(owUrl != null);
         Button fix = new Button("Quick fix");
         btnLayout.addComponent(fix);
         btnLayout.addComponent(editOW);
@@ -120,7 +121,7 @@ public class IC05 extends IntegrityConstraintComponent {
         editOW.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // TODO make replacement
+                editManually((String)listDimensions.getValue());
             }
         });
         listDimensions.addValueChangeListener(new Property.ValueChangeListener() {

@@ -40,6 +40,7 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
     
     protected Repository repository;
     protected String graph;
+    protected String owUrl;
     protected ICQuery icQuery;
     protected VerticalLayout rootLayout;
     protected StatusToIconMapper statusMapper;
@@ -69,11 +70,12 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
         }
     }
     
-    public IntegrityConstraintComponent(Repository repository, String graph){
+    public IntegrityConstraintComponent(Repository repository, String graph, String owUrl){
         this.rootLayout = new VerticalLayout();
         this.rootLayout.setSpacing(true);
         this.repository = repository;
         this.graph = graph;
+        this.owUrl = owUrl;
         this.icQuery = generateICQuery();
         this.icQuery.addQueryListener(this);
         this.statusMapper = DefaultStatusToIconMapper.getInstance();
@@ -312,6 +314,19 @@ public abstract class IntegrityConstraintComponent extends CustomComponent imple
             e.printStackTrace();
         }
         return null;
+    }
+    
+    protected void editManually(String resource) {
+        if (resource == null || resource.isEmpty()){
+            Notification.show("Resource cannot be empty or null", Notification.Type.ERROR_MESSAGE);
+            return;
+        }
+        if (owUrl == null) {
+            Notification.show("OntoWiki is not configured", Notification.Type.ERROR_MESSAGE);
+            return;
+        }
+        String url = owUrl + "/resource/properties?m="+graph+"&r="+resource;
+        getUI().getPage().open(url, "_blank", false);
     }
     
 }

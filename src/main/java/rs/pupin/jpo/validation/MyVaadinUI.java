@@ -35,8 +35,10 @@ public class MyVaadinUI extends UI implements ClientConnector.DetachListener
         addDetachListener(this);
         String g = request.getParameter("graph");
         String e = request.getParameter("endpoint");
+        String o = request.getParameter("ontowiki");
         final String graph = (g!=null)?g:"http://validation-test/regular-data/";
         final String endpoint = (e!=null)?e:"http://default.endpoint/sparql";
+        final String owUrl = (o!=null)?o:null;
         
         final Repository repository = new SPARQLRepository(endpoint);
         try {
@@ -58,7 +60,7 @@ public class MyVaadinUI extends UI implements ClientConnector.DetachListener
 //        });
 //        layout.addComponent(button);
         
-        setContent(new ValidationComponent(repository, endpoint, graph));
+        setContent(new ValidationComponent(repository, endpoint, graph, owUrl));
     }
 
 }

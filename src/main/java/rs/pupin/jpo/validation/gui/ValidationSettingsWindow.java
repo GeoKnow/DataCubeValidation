@@ -32,11 +32,14 @@ import org.openrdf.repository.sparql.SPARQLRepository;
  */
 public class ValidationSettingsWindow extends Window {
     private CheckBox authCheckBox;
+    private CheckBox owCheckBox;
+    private TextField owInput;
     
     public static class ValidationSettingsState {
         public Repository repository = null;
         public String endpoint;
         public String graph;
+        public String owUrl;
     }
     
     private ValidationSettingsState state;
@@ -55,13 +58,13 @@ public class ValidationSettingsWindow extends Window {
         setResizable(false);
         setDraggable(false);
         setWidth("700px");
-        setHeight("400px");
+        setHeight("570px");
         
-        settingsLayout = new GridLayout(2,8);
+        settingsLayout = new GridLayout(2,11);
         settingsLayout.setMargin(true);
         settingsLayout.setSizeFull();
         settingsLayout.setColumnExpandRatio(1, 2.0f);
-        settingsLayout.setRowExpandRatio(4, 2.0f);
+        settingsLayout.setRowExpandRatio(9, 2.0f);
         settingsLayout.setSpacing(true);
         setContent(settingsLayout);
     }
@@ -125,8 +128,34 @@ public class ValidationSettingsWindow extends Window {
         settingsLayout.addComponent(passwordInput, 1, 5);
         
         lbl = new Label("");
-        lbl.setHeight("20px");
+        lbl.setHeight("30px");
         settingsLayout.addComponent(lbl, 0, 6, 1, 6);
+        
+        // add OntoWiki check box
+        owCheckBox = new CheckBox("Use OntoWiki instance");
+        owCheckBox.setSizeUndefined();
+        if (state.owUrl != null) owCheckBox.setValue(true);
+        else owCheckBox.setValue(false);
+        settingsLayout.addComponent(owCheckBox, 0, 7, 1, 7);
+        settingsLayout.setComponentAlignment(owCheckBox, Alignment.MIDDLE_LEFT);
+
+        // add OntoWiki field
+        lbl = new Label("OntoWiki URL:");
+        lbl.setSizeUndefined();
+        settingsLayout.addComponent(lbl, 0, 8);
+        settingsLayout.setComponentAlignment(lbl, Alignment.MIDDLE_LEFT);
+        owInput = new TextField();
+        owInput.setWidth("100%");
+        if (state.owUrl != null) {
+            owInput.setEnabled(true);
+            owInput.setValue(state.owUrl);
+        } else owInput.setEnabled(false);
+        settingsLayout.addComponent(owInput, 1, 8);
+        settingsLayout.setComponentAlignment(owInput, Alignment.MIDDLE_LEFT);
+        
+        lbl = new Label("");
+        lbl.setHeight("30px");
+        settingsLayout.addComponent(lbl, 0, 9, 1, 9);
 
         // add buttons
         HorizontalLayout hl = new HorizontalLayout();
@@ -136,7 +165,7 @@ public class ValidationSettingsWindow extends Window {
         btnCancel = new Button("Cancel");
         hl.addComponent(btnOK);
         hl.addComponent(btnCancel);
-        settingsLayout.addComponent(hl, 1, 7);
+        settingsLayout.addComponent(hl, 1, 10);
         settingsLayout.setComponentAlignment(hl, Alignment.MIDDLE_RIGHT);
         
         createListeners();
@@ -153,7 +182,9 @@ public class ValidationSettingsWindow extends Window {
         btnOK.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if (state.endpoint.equals(endpointInput.getValue()) && state.graph.equals(graphInput.getValue())) {
+                if (state.endpoint.equals(endpointInput.getValue()) && 
+                        state.graph.equals(graphInput.getValue()) && 
+                        !owChanged()) {
                     close();
                     return;
                 }
@@ -180,6 +211,9 @@ public class ValidationSettingsWindow extends Window {
                     state.repository = r;
                     state.endpoint = endpointInput.getValue();
                     state.graph = graphInput.getValue();
+                    if (owCheckBox.getValue()) {
+                        state.owUrl = (owInput.getValue()==null)?"":owInput.getValue();
+                    } else state.owUrl = null;
                     // TODO denote if input changed or not
                 } catch (RepositoryException ex) {
                     Logger.getLogger(ValidationComponent.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,6 +241,18 @@ public class ValidationSettingsWindow extends Window {
                 passwordInput.setEnabled(authCheckBox.getValue());
             }
         });
+        owCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                owInput.setEnabled(owCheckBox.getValue());
+            }
+        });
+    }
+    
+    private boolean owChanged(){
+        if (state.owUrl == null && !owCheckBox.getValue()) return false;
+        else if (state.owUrl != null && owCheckBox.getValue() && state.owUrl.equals(owInput.getValue())) return false;
+        else return true;
     }
     
 }

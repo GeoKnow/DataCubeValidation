@@ -34,6 +34,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     private Repository repository;
     private String graph;
     private String endpoint;
+    private String owUrl;
     private HorizontalLayout headerLayout;
     private Button btnSettings;
     private Button btnClearAll;
@@ -46,10 +47,11 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     private Button btnRDFUnit;
     private Button btnRefresh;
     
-    public ValidationComponent(Repository repository, String endpoint, String graph){
+    public ValidationComponent(Repository repository, String endpoint, String graph, String owUrl){
         this.repository = repository;
         this.endpoint = endpoint;
         this.graph = graph;
+        this.owUrl = owUrl;
         this.icHash = new HashMap<ICQuery, IntegrityConstraintComponent>();
         setSizeFull();
         rootLayout = new VerticalLayout();
@@ -108,29 +110,29 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
     }
     
     private void createConstraints(){
-        addIC(new Summary(repository, graph));
-        addIC(new Provenance(repository, graph));
-        addIC(new IC01(repository, graph));
-        addIC(new IC02(repository, graph));
-        addIC(new IC03(repository, graph));
-        addIC(new IC04(repository, graph));
-        addIC(new IC05(repository, graph));
-        addIC(new IC06(repository, graph));
-        addIC(new IC07(repository, graph));
-        addIC(new IC08(repository, graph));
-        addIC(new IC09(repository, graph));
-        addIC(new IC10(repository, graph));
-        addIC(new IC11(repository, graph));
-        addIC(new IC12(repository, graph));
-        addIC(new IC13(repository, graph));
-        addIC(new IC14(repository, graph));
-        addIC(new IC15(repository, graph));
-        addIC(new IC16(repository, graph));
-        addIC(new IC17(repository, graph));
-        addIC(new IC18(repository, graph));
-        addIC(new IC19(repository, graph));
-        addIC(new IC20(repository, graph));
-        addIC(new IC21(repository, graph));
+        addIC(new Summary(repository, graph, owUrl));
+        addIC(new Provenance(repository, graph, owUrl));
+        addIC(new IC01(repository, graph, owUrl));
+        addIC(new IC02(repository, graph, owUrl));
+        addIC(new IC03(repository, graph, owUrl));
+        addIC(new IC04(repository, graph, owUrl));
+        addIC(new IC05(repository, graph, owUrl));
+        addIC(new IC06(repository, graph, owUrl));
+        addIC(new IC07(repository, graph, owUrl));
+        addIC(new IC08(repository, graph, owUrl));
+        addIC(new IC09(repository, graph, owUrl));
+        addIC(new IC10(repository, graph, owUrl));
+        addIC(new IC11(repository, graph, owUrl));
+        addIC(new IC12(repository, graph, owUrl));
+        addIC(new IC13(repository, graph, owUrl));
+        addIC(new IC14(repository, graph, owUrl));
+        addIC(new IC15(repository, graph, owUrl));
+        addIC(new IC16(repository, graph, owUrl));
+        addIC(new IC17(repository, graph, owUrl));
+        addIC(new IC18(repository, graph, owUrl));
+        addIC(new IC19(repository, graph, owUrl));
+        addIC(new IC20(repository, graph, owUrl));
+        addIC(new IC21(repository, graph, owUrl));
         
         criteriaTree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
@@ -172,6 +174,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                 final ValidationSettingsWindow.ValidationSettingsState state = new ValidationSettingsWindow.ValidationSettingsState();
                 state.endpoint = endpoint;
                 state.graph = graph;
+                state.owUrl = owUrl;
                 Window w = new ValidationSettingsWindow(state);
                 w.addCloseListener(new Window.CloseListener() {
                     @Override
@@ -186,6 +189,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
                             repository = state.repository;
                             endpoint = state.endpoint;
                             graph = state.graph;
+                            owUrl = state.owUrl;
                             refresh();
                         }
                     }
@@ -218,7 +222,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
 
     @Override
     public void detach() {
-        super.detach(); //To change body of generated methods, choose Tools | Templates.
+        super.detach(); 
         System.out.println("Detach Validation called!");
     }
 
@@ -231,11 +235,13 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
 
     @Override
     public void icQueryChanged(ICQuery ic) {
+        // if it's not the currently selected IC only update the icon
         if (!ic.equals(criteriaTree.getValue())) {
             criteriaTree.setItemIcon(ic, icHash.get(ic).getIcon());
             return;
         }
         
+        // if it is the currently selected IC put proper Component in content pane
         contentLayout.removeAllComponents();
         IntegrityConstraintComponent icComponent = icHash.get(ic);
         contentLayout.addComponent(icComponent);

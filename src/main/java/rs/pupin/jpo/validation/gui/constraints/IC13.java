@@ -28,8 +28,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC13 extends IntegrityConstraintComponent {
 
-    public IC13(Repository repository, String graph) {
-        super(repository, graph);
+    public IC13(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -106,6 +106,7 @@ public class IC13 extends IntegrityConstraintComponent {
         btnLayout.setSpacing(true);
         Button removeRequired = new Button("Remove qb:componentRequired");
         Button editOW = new Button("Edit in OntoWiki");
+        editOW.setEnabled(owUrl != null);
         btnLayout.addComponent(removeRequired);
         btnLayout.addComponent(editOW);
         panelLayout.addComponent(btnLayout);
@@ -136,7 +137,7 @@ public class IC13 extends IntegrityConstraintComponent {
         editOW.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // TODO create replacement
+                editManually((String)listObservations.getValue());
             }
         });
     }

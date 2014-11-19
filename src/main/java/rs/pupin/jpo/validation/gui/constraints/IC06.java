@@ -29,8 +29,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC06 extends IntegrityConstraintComponent {
 
-    public IC06(Repository repository, String graph) {
-        super(repository, graph);
+    public IC06(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
     
     @Override
@@ -112,6 +112,7 @@ public class IC06 extends IntegrityConstraintComponent {
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);
         Button editOW = new Button("Edit in OntoWiki");
+        editOW.setEnabled(owUrl != null);
         Button removeCompReq = new Button("Remove qb:componentRequired");
         Button turnToAttr = new Button("Turn to attribute");
         btnLayout.addComponent(removeCompReq);
@@ -163,7 +164,7 @@ public class IC06 extends IntegrityConstraintComponent {
         editOW.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // TODO create replacement
+                editManually((String)listComponents.getValue());
             }
         });
     }

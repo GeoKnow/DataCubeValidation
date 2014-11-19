@@ -20,8 +20,8 @@ import rs.pupin.jpo.validation.ic.ICQuery;
  */
 public class Summary extends IntegrityConstraintComponent {
 
-    public Summary(Repository repository, String graph) {
-        super(repository, graph);
+    public Summary(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
         this.statusMapper = InfoStatusToIconMapper.getInstance();
     }
 

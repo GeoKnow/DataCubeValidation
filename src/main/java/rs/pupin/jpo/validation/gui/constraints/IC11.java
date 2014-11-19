@@ -21,8 +21,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC11 extends IntegrityConstraintComponent {
 
-    public IC11(Repository repository, String graph) {
-        super(repository, graph);
+    public IC11(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override

@@ -21,8 +21,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC14 extends IntegrityConstraintComponent {
 
-    public IC14(Repository repository, String graph) {
-        super(repository, graph);
+    public IC14(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -85,13 +85,14 @@ public class IC14 extends IntegrityConstraintComponent {
 
 		// TODO: add label that tells which measure is missing
         Button fix = new Button("Edit in OntoWiki");
+        fix.setEnabled(owUrl != null);
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
         fix.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // create a replacement
+                editManually((String)listObservations.getValue());
             }
         });
     }

@@ -26,8 +26,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class Provenance extends IntegrityConstraintComponent {
 
-    public Provenance(Repository repository, String graph) {
-        super(repository, graph);
+    public Provenance(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
         this.statusMapper = InfoStatusToIconMapper.getInstance();
     }
 

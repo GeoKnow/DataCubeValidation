@@ -33,8 +33,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC12 extends IntegrityConstraintComponent {
 
-    public IC12(Repository repository, String graph) {
-        super(repository, graph);
+    public IC12(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override

@@ -21,8 +21,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC18 extends IntegrityConstraintComponent {
 
-    public IC18(Repository repository, String graph) {
-        super(repository, graph);
+    public IC18(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -88,13 +88,14 @@ public class IC18 extends IntegrityConstraintComponent {
 
 		// TODO: add label that tells which dataset and slice are in question, perhaps details table
         Button fix = new Button("Edit in OntoWiki");
+        fix.setEnabled(owUrl != null);
         rootLayout.addComponent(fix);
         rootLayout.setExpandRatio(fix, 2.0f);
 
         fix.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // TODO create a replacement
+                editManually((String)listObservations.getValue());
             }
         });
     }

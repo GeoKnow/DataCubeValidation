@@ -21,8 +21,8 @@ import rs.pupin.jpo.validation.ic.ICQueryTemplate;
  */
 public class IC21 extends IntegrityConstraintComponent {
 
-    public IC21(Repository repository, String graph) {
-        super(repository, graph);
+    public IC21(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -104,10 +104,11 @@ public class IC21 extends IntegrityConstraintComponent {
         rootLayout.addComponent(listValues);
 
         Button editInOW = new Button("Edit in OntoWiki");
+        editInOW.setEnabled(owUrl != null);
         editInOW.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                // create a replacement
+                editManually((String)listValues.getValue());
             }
         });
     }

@@ -39,8 +39,8 @@ import rs.pupin.jpo.validation.ic.ICQuerySimple;
  */
 public class IC01 extends IntegrityConstraintComponent {
 
-    public IC01(Repository repository, String graph) {
-        super(repository, graph);
+    public IC01(Repository repository, String graph, String owUrl) {
+        super(repository, graph, owUrl);
     }
 
     @Override
@@ -108,11 +108,13 @@ public class IC01 extends IntegrityConstraintComponent {
         rootLayout.addComponent(lblProblem);
 		
         Button editInOW = new Button("Edit in OntoWiki");
-//        editInOW.addListener(new Button.ClickListener() {
-//            public void buttonClick(Button.ClickEvent event) {
-//                showInOntowiki((String)listObs.getValue());
-//            }
-//        });
+        editInOW.setEnabled(owUrl != null);
+        editInOW.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                editManually((String)listObs.getValue());
+            }
+        });
 		
         Form panelQuickFix = new Form();
         panelQuickFix.setCaption("Quick Fix");
