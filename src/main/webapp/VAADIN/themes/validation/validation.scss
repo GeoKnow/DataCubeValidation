@@ -63,4 +63,10 @@ $v-focus-color: $header-background-color;
   .v-splitpanel-first-container {
       padding-top: $header-padding;
   }
+  // TODO make it work, at the moment it doesn't :)
+  .validation .v-tree-node-caption > div:before {
+      width: 0px;
+      margin: 0px;
+      padding-left: $header-padding;
+  }
 }

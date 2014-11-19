@@ -11847,3 +11847,9 @@ div.v-layout.v-horizontal.v-widget {
 .validation .v-splitpanel-first-container {
 	padding-top: 15px;
 }
+
+.validation .validation .v-tree-node-caption > div:before {
+	width: 0px;
+	margin: 0px;
+	padding-left: 15px;
+}
