@@ -57,4 +57,10 @@ $v-focus-color: $header-background-color;
       font-weight: bold;
       color: black;
   }
+  .v-splitpanel-second-container {
+      padding-top: $header-padding;
+  }
+  .v-splitpanel-first-container {
+      padding-top: $header-padding;
+  }
 }

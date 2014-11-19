@@ -98,7 +98,7 @@ public class IC02 extends IntegrityConstraintComponent {
         listDataSets.setWidth("100%");
 
         final Table detailsTable = new Table("Details");
-        detailsTable.setHeight("200px");
+        detailsTable.setHeight("250px");
         detailsTable.setWidth("100%");
         detailsTable.addContainerProperty("Property", String.class, null);
         detailsTable.addContainerProperty("Object", String.class, null);

@@ -98,7 +98,7 @@ public class IC01 extends IntegrityConstraintComponent {
         listObs.setWidth("100%");
 		
         final Table detailsTable = new Table("Details");
-        detailsTable.setHeight("200px");
+        detailsTable.setHeight("250px");
         detailsTable.setWidth("100%");
         detailsTable.addContainerProperty("Property", String.class, null);
         detailsTable.addContainerProperty("Object", String.class, null);
@@ -107,7 +107,7 @@ public class IC01 extends IntegrityConstraintComponent {
         final Label lblProblem = new Label("<b>Problem description: </b>", ContentMode.HTML);
         rootLayout.addComponent(lblProblem);
 		
-        Button editInOW = new Button("TODO: Show details");
+        Button editInOW = new Button("Edit in OntoWiki");
 //        editInOW.addListener(new Button.ClickListener() {
 //            public void buttonClick(Button.ClickEvent event) {
 //                showInOntowiki((String)listObs.getValue());

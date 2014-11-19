@@ -11839,3 +11839,11 @@ div.v-layout.v-horizontal.v-widget {
 	font-weight: bold;
 	color: black;
 }
+
+.validation .v-splitpanel-second-container {
+	padding-top: 15px;
+}
+
+.validation .v-splitpanel-first-container {
+	padding-top: 15px;
+}

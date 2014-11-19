@@ -100,7 +100,7 @@ public class IC10 extends IntegrityConstraintComponent {
         rootLayout.addComponent(lsSlices);
 
         final Table detailsTable = new Table("Slice details");
-        detailsTable.setHeight("200px");
+        detailsTable.setHeight("250px");
         detailsTable.setWidth("100%");
         detailsTable.addContainerProperty("Property", String.class, null);
         detailsTable.addContainerProperty("Object", String.class, null);

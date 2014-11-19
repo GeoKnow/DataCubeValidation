@@ -90,7 +90,7 @@ public class IC08 extends IntegrityConstraintComponent {
         rootLayout.addComponent(lsSliceKeys);
 
         final Table detailsTable = new Table("Slice key details");
-        detailsTable.setHeight("200px");
+        detailsTable.setHeight("250px");
         detailsTable.setWidth("100%");
         detailsTable.addContainerProperty("Property", String.class, null);
         detailsTable.addContainerProperty("Object", String.class, null);
