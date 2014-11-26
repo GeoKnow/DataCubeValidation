@@ -200,7 +200,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
         btnRDFUnit.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                Window w = new RDFUnitWindow(repository, graph);
+                Window w = new RDFUnitWindow(repository, endpoint, graph);
                 getUI().addWindow(w);
             }
         });

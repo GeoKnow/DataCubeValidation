@@ -5,17 +5,34 @@
  */
 package rs.pupin.jpo.validation.gui;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.aksw.rdfunit.validate.wrappers.RDFUnitStaticWrapper;
+import org.aksw.rdfunit.RDFUnit;
+import org.aksw.rdfunit.RDFUnitConfiguration;
+import org.aksw.rdfunit.Utils.RDFUnitUtils;
+import org.aksw.rdfunit.io.reader.RDFReaderException;
+import org.aksw.rdfunit.io.writer.RDFHTMLResultsWriter;
+import org.aksw.rdfunit.io.writer.RDFWriterFactory;
+import org.aksw.rdfunit.sources.Source;
+import org.aksw.rdfunit.tests.TestSuite;
+import org.aksw.rdfunit.tests.executors.TestExecutor;
+import org.aksw.rdfunit.tests.executors.TestExecutorFactory;
+import org.aksw.rdfunit.tests.executors.monitors.SimpleTestExecutorMonitor;
+import org.aksw.rdfunit.tests.generators.TestGeneratorExecutor;
+import org.aksw.rdfunit.validate.ParameterException;
+import org.aksw.rdfunit.validate.utils.ValidateUtils;
+import org.apache.commons.cli.CommandLine;
 import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -36,14 +53,18 @@ import org.openrdf.rio.Rio;
  */
 public class RDFUnitWindow extends Window {
     
-    private Repository repository;
-    private String graph;
+    private final Repository repository;
+    private final String endpoint;
+    private final String graph;
     private final VerticalLayout layout;
     private Button btnValidate;
     private Label statusLabel;
+    private Label resLabel;
+    private final Panel scrollPane;
     
-    public RDFUnitWindow(Repository repository, String graph){
+    public RDFUnitWindow(Repository repository, String endpoint, String graph){
         this.repository = repository;
+        this.endpoint = endpoint;
         this.graph = graph;
         
         setModal(true);
@@ -52,11 +73,17 @@ public class RDFUnitWindow extends Window {
         setWidth("90%");
         setHeight("90%");
         
+        scrollPane = new Panel();
+        scrollPane.setSizeFull();
+        
         layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
-        layout.setSizeFull();
-        setContent(layout);
+        layout.setSizeUndefined();
+        layout.setWidth("100%");
+        
+        scrollPane.setContent(layout);
+        setContent(scrollPane);
     }
 
     @Override
@@ -70,10 +97,10 @@ public class RDFUnitWindow extends Window {
         btnValidate.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                statusLabel.setValue("Creating a file...");
-                createFile();
+//                statusLabel.setValue("Creating a file...");
+//                createFile();
                 statusLabel.setValue("Executing...");
-//                validate();
+                validate();
                 statusLabel.setValue("Finished");
             }
         });
@@ -82,7 +109,13 @@ public class RDFUnitWindow extends Window {
         
         statusLabel = new Label("Click execute to validate the graph with RDFUnit");
         layout.addComponent(statusLabel);
-        layout.setExpandRatio(statusLabel, 2.0f);
+        layout.setExpandRatio(statusLabel, 0.0f);
+        
+        resLabel = new Label("Results...", ContentMode.HTML);
+        resLabel.setSizeUndefined();
+        resLabel.setWidth("100%");
+        layout.addComponent(resLabel);
+        layout.setExpandRatio(resLabel, 2.0f);
     }
     
     private void createFile(){
@@ -121,9 +154,70 @@ public class RDFUnitWindow extends Window {
     }
     
     private void validate(){
-        throw new UnsupportedOperationException("Not implemented yet");
-        // TODO
-        
+        String [] args = {"-d", graph, "-e", endpoint, "-g", graph};
+        try { 
+            CommandLine commandLine = ValidateUtils.parseArguments(args);
+            
+//            String dataFolder = commandLine.getOptionValue("f", "../data/");
+            RDFUnitUtils.fillSchemaServiceFromLOV(); // this can probably be moved to app initialization
+//            RDFUnitUtils.fillSchemaServiceFromFile(dataFolder + "schemaDecl.csv");
+            
+            RDFUnitConfiguration configuration = null;
+            try {
+                configuration = ValidateUtils.getConfigurationFromArguments(commandLine);
+            } catch (ParameterException e) {
+                String message = e.getMessage();
+                if (message != null) {
+                    Notification.show(message, Notification.Type.ERROR_MESSAGE);
+                    return;
+                } else {
+                    Notification.show("Parameter exception occured!", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            assert (configuration != null);
+            
+//            if (!RDFUnitUtils.fileExists(configuration.getDataFolder())) {
+//                Notification.show("Path : " + configuration.getDataFolder() + " does not exists, use -f argument", Notification.Type.ERROR_MESSAGE);
+//                return;
+//            } // this can probably be removed
+
+            RDFUnit rdfunit = new RDFUnit(/*configuration.getDataFolder()*/);
+            try {
+                rdfunit.init();
+            } catch (RDFReaderException e) {
+                Notification.show("Cannot read patterns and/or pattern generators", Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            
+            final Source dataset = configuration.getTestSource();
+            /* </cliStuff> */
+
+            TestGeneratorExecutor testGeneratorExecutor = new TestGeneratorExecutor(
+                    configuration.isAutoTestsEnabled(),
+                    configuration.isTestCacheEnabled(),
+                    configuration.isManualTestsEnabled());
+            TestSuite testSuite = testGeneratorExecutor.generateTestSuite(configuration.getTestFolder(), dataset, rdfunit.getAutoGenerators());
+
+            TestExecutor testExecutor = TestExecutorFactory.createTestExecutor(configuration.getTestCaseExecutionType());
+            if (testExecutor == null) {
+                Notification.show("Cannot initialize test executor. Exiting", Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            SimpleTestExecutorMonitor testExecutorMonitor = new SimpleTestExecutorMonitor();
+            testExecutor.addTestExecutorMonitor(testExecutorMonitor);
+
+            // warning, caches intermediate results
+            testExecutor.execute(dataset, testSuite, 0);
+            
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            RDFHTMLResultsWriter resWriter = RDFWriterFactory.createHTMLWriter(configuration.getTestCaseExecutionType(), outStream);
+            
+            resWriter.write(testExecutorMonitor.getModel());
+            resLabel.setValue(outStream.toString());
+        } catch (Exception e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+        }
     }
     
 }
