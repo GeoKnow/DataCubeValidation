@@ -1,0 +1,9 @@
+Package: rdf-data-cube-validation
+Version: 1.0
+Section: misc
+Priority: optional
+Architecture: all
+Depends: tomcat7
+Maintainer: Vuk Mijovic <vuk.mijovic@pupin.rs>
+Description: RDF Data Cube Validation tool
+Distribution: development

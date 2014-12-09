@@ -18,7 +18,6 @@ import com.vaadin.ui.Window;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.aksw.rdfunit.validate.wrappers.RDFUnitStaticWrapper;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import rs.pupin.jpo.validation.gui.constraints.*;
@@ -228,7 +227,7 @@ public class ValidationComponent extends CustomComponent implements ICQueryListe
 
     @Override
     public void attach() {
-        RDFUnitStaticWrapper.initWrapper("file:///tmp/", "data-cube-validation-" + getUI().hashCode() + ".ttl");
+        super.attach();
         createUI();
         System.out.println("Attach called!");
     }
