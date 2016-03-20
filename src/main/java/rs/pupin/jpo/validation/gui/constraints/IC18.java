@@ -84,6 +84,7 @@ public class IC18 extends IntegrityConstraintComponent {
 
         final ListSelect listObservations = new ListSelect("Observations", obsMap.keySet());
         listObservations.setNullSelectionAllowed(false);
+        listObservations.setImmediate(true);
         rootLayout.addComponent(listObservations);
 
 		// TODO: add label that tells which dataset and slice are in question, perhaps details table

@@ -85,6 +85,7 @@ public class IC04 extends IntegrityConstraintComponent {
 
         final ListSelect listDimensions = new ListSelect("Dimensions", dimList);
         listDimensions.setNullSelectionAllowed(false);
+        listDimensions.setImmediate(true);
         rootLayout.addComponent(listDimensions);
 
         Form panelQuickFix = new Form();
@@ -105,6 +106,7 @@ public class IC04 extends IntegrityConstraintComponent {
         final ComboBox comboType = new ComboBox();
         comboType.setWidth("100%");
         comboType.setNullSelectionAllowed(false);
+        comboType.setImmediate(true);
         panelLayout.addComponent(comboType);
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);

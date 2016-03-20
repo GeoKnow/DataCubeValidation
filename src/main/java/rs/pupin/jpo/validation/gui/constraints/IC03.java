@@ -89,6 +89,7 @@ public class IC03 extends IntegrityConstraintComponent {
 
         final ListSelect listDSDs = new ListSelect("DSDs", dsdList);
         listDSDs.setNullSelectionAllowed(false);
+        listDSDs.setImmediate(true);
         rootLayout.addComponent(listDSDs);
 
         Form panelQuickFix = new Form();
@@ -109,6 +110,7 @@ public class IC03 extends IntegrityConstraintComponent {
         final ComboBox comboComponents = new ComboBox();
         comboComponents.setWidth("100%");
         comboComponents.setNullSelectionAllowed(false);
+        comboComponents.setImmediate(true);
         panelLayout.addComponent(comboComponents);
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);

@@ -84,6 +84,7 @@ public class IC13 extends IntegrityConstraintComponent {
 
         final ListSelect listObservations = new ListSelect("Observations", obsMap.keySet());
         listObservations.setNullSelectionAllowed(false);
+        listObservations.setImmediate(true);
         rootLayout.addComponent(listObservations);
 
         // TODO: add label that tells which attribute is missing

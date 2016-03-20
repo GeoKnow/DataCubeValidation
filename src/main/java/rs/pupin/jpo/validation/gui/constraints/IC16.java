@@ -91,6 +91,7 @@ public class IC16 extends IntegrityConstraintComponent {
 
         final ListSelect listObservations = new ListSelect("Observations", obsMap.keySet());
         listObservations.setNullSelectionAllowed(false);
+        listObservations.setImmediate(true);
         rootLayout.addComponent(listObservations);
 
 		// TODO: add label that tells what is the measure dimension and mention the omeasure, perhaps details table

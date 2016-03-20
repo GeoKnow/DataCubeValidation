@@ -106,6 +106,7 @@ public class IC17 extends IntegrityConstraintComponent {
 
         final ListSelect listObservations = new ListSelect("Observations", obsMap.keySet());
         listObservations.setNullSelectionAllowed(false);
+        listObservations.setImmediate(true);
         rootLayout.addComponent(listObservations);
 
 		// TODO: add label that tells what is the difference in counts, maybe even more, perhaps details table

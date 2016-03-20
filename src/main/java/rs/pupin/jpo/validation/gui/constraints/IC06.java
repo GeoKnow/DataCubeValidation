@@ -83,6 +83,7 @@ public class IC06 extends IntegrityConstraintComponent {
 
         final ListSelect listComponents = new ListSelect("Component Properties", compMap.keySet());
         listComponents.setNullSelectionAllowed(false);
+        listComponents.setImmediate(true);
         rootLayout.addComponent(listComponents);
 
         final Table detailsTable = new Table("Details");

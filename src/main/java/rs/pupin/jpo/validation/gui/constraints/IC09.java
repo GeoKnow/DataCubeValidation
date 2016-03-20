@@ -119,6 +119,7 @@ public class IC09 extends IntegrityConstraintComponent {
         final ComboBox comboKeys = new ComboBox();
         comboKeys.setWidth("100%");
         comboKeys.setNullSelectionAllowed(false);
+        comboKeys.setImmediate(true);
         panelLayout.addComponent(comboKeys);
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);

@@ -98,6 +98,7 @@ public class IC20 extends IntegrityConstraintComponent {
 
         final ListSelect listValues = new ListSelect("Resources", map.keySet());
         listValues.setNullSelectionAllowed(false);
+        listValues.setImmediate(true);
         rootLayout.addComponent(listValues);
 
         Button editInOW = new Button("Edit in OntoWiki");

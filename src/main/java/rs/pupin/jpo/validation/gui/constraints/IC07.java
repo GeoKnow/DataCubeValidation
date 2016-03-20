@@ -114,6 +114,7 @@ public class IC07 extends IntegrityConstraintComponent {
         final ComboBox comboDSDs = new ComboBox();
         comboDSDs.setNullSelectionAllowed(false);
         comboDSDs.setWidth("100%");
+        comboDSDs.setImmediate(true);
         panelLayout.addComponent(comboDSDs);
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);

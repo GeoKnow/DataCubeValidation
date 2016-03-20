@@ -67,6 +67,7 @@ public class IC11 extends IntegrityConstraintComponent {
         }
         ListSelect ls = new ListSelect("Observations", listObs);
         ls.setNullSelectionAllowed(false);
+        ls.setImmediate(true);
         ls.setWidth("100%");
         rootLayout.addComponent(ls);
         Button fix = new Button("Quick Fix");

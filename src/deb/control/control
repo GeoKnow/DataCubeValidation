@@ -5,5 +5,6 @@ Priority: optional
 Architecture: all
 Depends: tomcat7
 Maintainer: Vuk Mijovic <vuk.mijovic@pupin.rs>
+Homepage: https://github.com/GeoKnow/DataCubeValidation
 Description: RDF Data Cube Validation tool
-Distribution: development
+Distribution: ldstack-nightly

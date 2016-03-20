@@ -129,6 +129,7 @@ public class IC01 extends IntegrityConstraintComponent {
         final ComboBox comboDataSets = new ComboBox(null, getDataSets());
         comboDataSets.setNullSelectionAllowed(false);
         comboDataSets.setWidth("100%");
+        comboDataSets.setImmediate(true);
         panelLayout.addComponent(comboDataSets);
         final Button fix = new Button("Quick Fix");
         HorizontalLayout buttonsLayout = new HorizontalLayout();
